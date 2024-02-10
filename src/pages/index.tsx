@@ -4,10 +4,9 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 import { api } from "~/utils/api";
+import LandingResume from "~/components/LandingResume";
 
 export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
-
   return (
     <>
       <Head>
@@ -16,15 +15,20 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex grow">
-        <motion.div className="flex max-h-full grow flex-col items-center gap-4 align-middle md:flex-row md:justify-between md:gap-0">
-          <div className="flex flex-col text-center align-middle font-serif text-5xl font-bold md:text-left">
+        <div className="flex max-h-full grow flex-col items-center gap-4 align-middle md:flex-row md:justify-between md:gap-0">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col text-center align-middle font-serif text-5xl font-bold md:text-left"
+          >
             <p>Take your resume</p>
             <p className="bg-gradient-to-r from-black to-slate-400 bg-clip-text text-transparent dark:from-white dark:to-slate-300">
               to the next level
             </p>
-          </div>
-          <div className="aspect-[2/3] w-full max-w-md rounded-sm bg-white drop-shadow-xl" />
-        </motion.div>
+          </motion.div>
+          <LandingResume />
+        </div>
       </main>
     </>
   );
