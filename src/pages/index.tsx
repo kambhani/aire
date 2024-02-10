@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 
 import { api } from "~/utils/api";
 import LandingResume from "~/components/LandingResume";
+import { Button } from "~/components/ui/button";
 
 export default function Home() {
   return (
@@ -20,12 +21,17 @@ export default function Home() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col text-center align-middle font-serif text-5xl font-bold md:text-left"
+            className="flex flex-col text-center align-middle font-serif text-5xl font-bold md:text-left mt-8"
           >
             <p>Take your resume</p>
             <p className="bg-gradient-to-r from-black to-slate-400 bg-clip-text text-transparent dark:from-white dark:to-slate-300">
               to the next level
             </p>
+            <div>
+              <a href="/auth/signin">
+                <Button>Get Started</Button>
+              </a>
+            </div>
           </motion.div>
           <LandingResume />
         </div>
