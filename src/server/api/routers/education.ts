@@ -46,7 +46,7 @@ export const educationRouter = createTRPCRouter({
 
       if (education.userId != ctx.session.user.id) {
         throw new TRPCError({
-          message: "Cannot delete another user's experience!",
+          message: "Cannot delete another user's education!",
           code: "FORBIDDEN",
         });
       }

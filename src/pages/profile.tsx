@@ -49,6 +49,20 @@ export default function Profile() {
     onSuccess: () => utils.experience.invalidate(),
   });
 
+  const [newProject, setNewProject] = useState({
+    name: "",
+    technologies: "",
+    timeframe: "",
+    description: "",
+  });
+  const projects = api.project.getUserProjects.useQuery();
+  const createProjectMutation = api.project.create.useMutation({
+    onSuccess: () => utils.project.invalidate(),
+  });
+  const deleteProjectMutation = api.project.delete.useMutation({
+    onSuccess: () => utils.project.invalidate(),
+  });
+
   return (
     <>
       <h1 className="my-8 text-center text-4xl font-semibold">
@@ -329,6 +343,120 @@ export default function Profile() {
                         className="h-4 w-4"
                         onClick={() =>
                           deleteExperienceMutation.mutate({ id: element.id })
+                        }
+                      />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+      </div>
+      <div className="mx-auto mt-8 px-2 md:w-11/12">
+        <h2 className="text-2xl text-blue-800 dark:text-blue-200">Projects</h2>
+        <div className="flex justify-end">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="success">+ Add Project</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>New Project</DialogTitle>
+                <DialogDescription>
+                  Add the details of your project here
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="project_name" className="text-right">
+                    Name
+                  </Label>
+                  <Input
+                    id="project_name"
+                    value={newProject.name}
+                    onChange={(newName) =>
+                      setNewProject({
+                        ...newProject,
+                        name: newName.target.value,
+                      })
+                    }
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="project_technologies" className="text-right">
+                    Technologies
+                  </Label>
+                  <Input
+                    id="project_technologies"
+                    value={newProject.technologies}
+                    onChange={(newTechnologies) =>
+                      setNewProject({
+                        ...newProject,
+                        technologies: newTechnologies.target.value,
+                      })
+                    }
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="project_timeframe" className="text-right">
+                    Timeframe
+                  </Label>
+                  <Input
+                    id="project_timeframe"
+                    value={newProject.timeframe}
+                    onChange={(newTimeframe) =>
+                      setNewProject({
+                        ...newProject,
+                        timeframe: newTimeframe.target.value,
+                      })
+                    }
+                    className="col-span-3"
+                  />
+                </div>
+                <Label htmlFor="project_description">Description</Label>
+                <Textarea
+                  id="project_description"
+                  value={newProject.description}
+                  onChange={(newDescription) =>
+                    setNewProject({
+                      ...newProject,
+                      description: newDescription.target.value,
+                    })
+                  }
+                />
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button
+                    type="submit"
+                    onClick={() => createProjectMutation.mutate(newProject)}
+                  >
+                    Save changes
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <div className="mt-4 flex flex-col gap-4">
+          {projects.data && (
+            <>
+              {projects.data.map((element) => (
+                <div className="flex w-full flex-row justify-between rounded-xl bg-blue-200 p-4 dark:bg-blue-800">
+                  <div>
+                    <h3 className="text-xl font-semibold">{element.name}</h3>
+                    <h4 className="font-light">{element.technologies}</h4>
+                  </div>
+                  <div className="my-auto flex h-full gap-4">
+                    <Button variant="destructive" size="icon">
+                      <Trash2
+                        className="h-4 w-4"
+                        onClick={() =>
+                          deleteProjectMutation.mutate({ id: element.id })
                         }
                       />
                     </Button>
