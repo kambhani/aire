@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 export default function Navbar() {
   const { data: sessionData } = useSession();
   return (
-    <div className="sticky top-0 z-50 w-full shadow-md p-2 dark:bg-black">
+    <div className="sticky top-0 z-50 w-full bg-white p-2 shadow-md dark:bg-black">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-2">
         <div className="w-fit">
           <Link href="/">
