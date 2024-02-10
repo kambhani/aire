@@ -21,6 +21,7 @@ export const metadataRouter = createTRPCRouter({
         phone: z.string(),
         linkedin: z.string(),
         github: z.string(),
+        skills: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -35,6 +36,7 @@ export const metadataRouter = createTRPCRouter({
           phone: input.phone,
           linkedin: input.linkedin,
           github: input.github,
+          skills: input.skills,
         },
         create: {
           name: input.name,
@@ -43,6 +45,7 @@ export const metadataRouter = createTRPCRouter({
           phone: input.phone,
           linkedin: input.linkedin,
           github: input.github,
+          skills: input.skills,
           userId: ctx.session.user.id,
         },
       });
