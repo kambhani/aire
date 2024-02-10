@@ -18,89 +18,117 @@ export default function Generate() {
     setTimeout(() => {
       setSubmitted(true);
       setLoading(false);
-    }, 1000)
-  }
+    }, 1000);
+  };
 
   return (
     <>
-      {
-        !submitted && (
-          <div className="mx-auto mt-24 grid w-full px-8">
+      {!submitted && (
+        <div className="mx-auto mt-24 grid w-full px-8">
+          <div className="mx-auto">
+            <h1 className="text-xl font-bold">Job Description</h1>
+            <p className=" text-sm text-slate-400">
+              Please copy and paste the job description for the posting you have
+              found below
+            </p>
+            <Textarea
+              className="mx-auto mb-4 mt-4 h-80 max-w-xl"
+              placeholder="enter the job description here..."
+              value={description}
+              onChange={(newDescription) =>
+                setDescription(newDescription.target.value)
+              }
+            />
 
-            <div className='mx-auto'>
-              <h1 className='text-xl font-bold'>Job Description</h1>
-              <p className=' text-slate-400 text-sm'>Please copy and paste the job description for the posting you have found below</p>
-              <Textarea
-                className="mb-4 h-80 max-w-xl mx-auto mt-4"
-                placeholder="enter the job description here..."
-                value={description}
-                onChange={(newDescription) =>
-                  setDescription(newDescription.target.value)
-                }
-              />
+            <p className="text-lg font-bold">Or, enter the job posting URL:</p>
 
+            <Input
+              className="mx-auto mb-4 mt-4 max-w-xl"
+              placeholder="https://www.example.com"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+            />
 
-              <p className='text-lg font-bold'>Or, enter the job posting URL:</p>
+            <Button className="bg-black" onClick={handleSubmit}>
+              {loading ? "Loading..." : "Submit"}
+            </Button>
+          </div>
+        </div>
+      )}
 
+      {submitted && (
+        <div className="mx-auto mt-24 grid w-full grid-cols-1 gap-16 px-8 sm:grid-cols-2">
+          <div>
+            <h1 className="text-xl font-bold">
+              Current resume match:{" "}
+              <span className="text-3xl text-red-600">18%</span>
+            </h1>
+
+            <h1 className="mt-4 text-xl font-bold">Suggestions</h1>
+            <ul className="ml-8 mt-2 list-disc">
+              <li>
+                Expand on your projects section to showcase your skills to
+                employers
+              </li>
+              <li>
+                You do not need so many things in the awards section because it
+                distracts from the overall point in your resume
+              </li>
+              <li>
+                High school experiences are not always needed on a resume once
+                you are in college, consider removing them
+              </li>
+            </ul>
+
+            <div className="ml-2">
               <Input
-                className="mb-4 max-w-xl mx-auto mt-4"
-                placeholder="https://www.example.com"
-                value={url}
-                onChange={(e) =>
-                  setUrl(e.target.value)
-                }
+                className="mx-auto mb-4 mt-4 max-w-xl"
+                placeholder="Ask a follow up question..."
+                value={userText}
+                onChange={(e) => setUserText(e.target.value)}
               />
-
-
-              <Button className='bg-black' onClick={handleSubmit}>{loading ? "Loading..." : "Submit"}</Button>
-
             </div>
           </div>
-        )
-      }
 
-      {
-        submitted && (
-          <div className="mx-auto mt-24 grid w-full px-8 grid gap-16 grid-cols-1 sm:grid-cols-2">
-            <div>
-              <h1 className='text-xl font-bold'>Current resume match: <span className='text-3xl text-red-600'>18%</span></h1>
+          <div>
+            <h1 className="text-xl font-bold">Generated Resume</h1>
+            <p className="mt-2 text-sm text-slate-400">
+              Generated resume and cover letters are written in LaTeX and can be
+              accessed via the links below
+            </p>
 
-              <h1 className='text-xl font-bold mt-4'>Suggestions</h1>
-              <ul className='list-disc ml-8 mt-2'>
-                <li>Expand on your projects section to showcase your skills to employers</li>
-                <li>You do not need so many things in the awards section because it distracts from the overall point in your resume</li>
-                <li>High school experiences are not always needed on a resume once you are in college, consider removing them</li>
-              </ul>
+            <ul className="ml-8 mt-2 list-disc">
+              <li>
+                <span className="font-bold">Generated Resume: </span>
+                <a
+                  href="https://www.overleaf.com/latex/templates/swe-resume-template/bznbzdprjfyy"
+                  className="text-blue-400"
+                >
+                  https://www.overleaf.com/latex/templates/swe-resume-template/bznbzdprjfyy
+                </a>
+              </li>
 
-              <div className="ml-2">
-                <Input
-                  className="mb-4 max-w-xl mx-auto mt-4"
-                  placeholder="Ask a follow up question..."
-                  value={userText}
-                  onChange={(e) =>
-                    setUserText(e.target.value)
-                  }
-                />
-              </div>
-            </div>
-
-
-
-            <div>
-              <h1 className='text-xl font-bold'>Generated Resume</h1>
-              <p className='text-slate-400 text-sm mt-2'>Generated resume and cover letters are written in LaTeX and can be accessed via the links below</p>
-
-              <ul className='list-disc ml-8 mt-2'>
-                <li><span className='font-bold'>Generated Resume: </span><a href="https://www.overleaf.com/latex/templates/swe-resume-template/bznbzdprjfyy" className='text-blue-400'>https://www.overleaf.com/latex/templates/swe-resume-template/bznbzdprjfyy</a></li>
-
-                <li><span className='font-bold'>Generated Cover Letter: </span><a href="https://www.overleaf.com/latex/templates/swe-resume-template/bznbzdprjfyy" className='text-blue-400'>https://www.overleaf.com/latex/templates/swe-resume-template/bznbzdprjfyy</a></li>
-
-              </ul>
+              <li>
+                <span className="font-bold">Generated Cover Letter: </span>
+                <a
+                  href="https://www.overleaf.com/latex/templates/swe-resume-template/bznbzdprjfyy"
+                  className="text-blue-400"
+                >
+                  https://www.overleaf.com/latex/templates/swe-resume-template/bznbzdprjfyy
+                </a>
+              </li>
+            </ul>
+            <div className="mt-4 grid grid-cols-2 gap-4">
+              <Button onClick={() => setSubmitted(false)}>
+                Enter another job description
+              </Button>
+              <Button variant="secondary" onClick={() => setSubmitted(false)}>
+                Regenerate resume
+              </Button>
             </div>
           </div>
-        )
-      }
-
+        </div>
+      )}
 
       {/* <div className="">
         <h2 className="mb-4 text-4xl">Paste job description here</h2>

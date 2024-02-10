@@ -15,7 +15,7 @@ import {
 } from "~/components/ui/dialog";
 import { Textarea } from "~/components/ui/textarea";
 import { Pencil, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Profile() {
@@ -31,6 +31,7 @@ export default function Profile() {
     github: "",
   });
   const metadata = api.metadata.getUserMetadata.useQuery();
+
   const upsertMetadataMutation = api.metadata.edit.useMutation({
     onSuccess: (data) => {
       utils.metadata.invalidate();
@@ -44,6 +45,7 @@ export default function Profile() {
       });
       toast("Metadata updated!");
     },
+    onError: () => toast("Metadata could not be updated"),
   });
 
   const [newEducation, setNewEducation] = useState({
@@ -54,9 +56,11 @@ export default function Profile() {
   const educations = api.education.getUserEducation.useQuery();
   const createEducationMutation = api.education.create.useMutation({
     onSuccess: () => utils.education.invalidate(),
+    onError: () => toast("Education could not be added"),
   });
   const deleteEducationMutation = api.education.delete.useMutation({
     onSuccess: () => utils.education.invalidate(),
+    onError: () => toast("Education could not be deleted"),
   });
 
   const [newExperience, setNewExperience] = useState({
@@ -72,6 +76,7 @@ export default function Profile() {
   });
   const deleteExperienceMutation = api.experience.delete.useMutation({
     onSuccess: () => utils.experience.invalidate(),
+    onError: () => toast("Experience could not be deleted"),
   });
 
   const [newProject, setNewProject] = useState({
@@ -86,6 +91,7 @@ export default function Profile() {
   });
   const deleteProjectMutation = api.project.delete.useMutation({
     onSuccess: () => utils.project.invalidate(),
+    onError: () => toast("Project could not be deleted"),
   });
 
   const [newSkills, setNewSkills] = useState({
@@ -104,8 +110,34 @@ export default function Profile() {
         developerTools: data.developerTools,
         libraries: data.libraries,
       });
+      toast("Skills saved!");
     },
+    onError: () => toast("Skills could not be updated"),
   });
+
+  useEffect(() => {
+    if (metadata.isSuccess && metadata.data) {
+      setNewMetadata({
+        name: metadata.data.name ?? "",
+        location: metadata.data.location ?? "",
+        email: metadata.data.location ?? "",
+        phone: metadata.data.location ?? "",
+        linkedin: metadata.data.linkedin ?? "",
+        github: metadata.data.github ?? "",
+      });
+    }
+  }, [metadata.isFetched]);
+
+  useEffect(() => {
+    if (skills.isSuccess && skills.data) {
+      setNewSkills({
+        languages: skills.data.languages,
+        frameworks: skills.data.frameworks,
+        developerTools: skills.data.developerTools,
+        libraries: skills.data.libraries,
+      });
+    }
+  }, [skills.isFetched]);
 
   return (
     <>
