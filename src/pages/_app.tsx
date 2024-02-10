@@ -1,5 +1,6 @@
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "next-themes";
 import { type AppType } from "next/app";
 
 import { api } from "~/utils/api";
@@ -13,17 +14,19 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <SessionProvider session={session}>
-      <div className="flex min-h-screen flex-col">
-        <div className="grow">
-          <Navbar />
-          <div>
-            <Component {...pageProps} />
+    <ThemeProvider attribute="class">
+      <SessionProvider session={session}>
+        <div className="flex min-h-screen flex-col">
+          <div className="grow">
+            <Navbar />
+            <div>
+              <Component {...pageProps} />
+            </div>
           </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </SessionProvider>
+      </SessionProvider>
+    </ThemeProvider>
   );
 };
 
