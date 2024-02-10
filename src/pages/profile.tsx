@@ -31,7 +31,9 @@ export default function Profile() {
   });
   const metadata = api.metadata.getUserMetadata.useQuery();
   const upsertMetadataMutation = api.metadata.edit.useMutation({
-    onSuccess: () => utils.metadata.invalidate(),
+    onSuccess: () => {
+      utils.metadata.invalidate();
+    },
   });
 
   const [newEducation, setNewEducation] = useState({
@@ -74,6 +76,25 @@ export default function Profile() {
   });
   const deleteProjectMutation = api.project.delete.useMutation({
     onSuccess: () => utils.project.invalidate(),
+  });
+
+  const [newSkills, setNewSkills] = useState({
+    languages: "",
+    frameworks: "",
+    developerTools: "",
+    libraries: "",
+  });
+  const skills = api.skill.getUserSkills.useQuery();
+  const upsertSkillMutation = api.skill.edit.useMutation({
+    onSuccess: (data) => {
+      utils.skill.invalidate();
+      setNewSkills({
+        languages: data.languages,
+        frameworks: data.frameworks,
+        developerTools: data.developerTools,
+        libraries: data.libraries,
+      });
+    },
   });
 
   return (
@@ -536,6 +557,85 @@ export default function Profile() {
             </>
           )}
         </div>
+      </div>
+      <div className="mx-auto mt-8 px-2 md:w-11/12">
+        <h2 className="mb-1 text-2xl text-blue-800 dark:text-blue-200">
+          Skills
+        </h2>
+        <div className="grid w-full items-center gap-1.5">
+          <Label className="text-xl" htmlFor="skills_languages">
+            Languages
+          </Label>
+          <Input
+            type="text"
+            id="skills_languages"
+            value={newSkills.languages}
+            onChange={(newLanguages) =>
+              setNewSkills({
+                ...newSkills,
+                languages: newLanguages.target.value,
+              })
+            }
+            placeholder={skills.data?.languages ?? "C, C++, HTML, Java"}
+          />
+        </div>
+        <div className="grid w-full items-center gap-1.5">
+          <Label className="text-xl" htmlFor="skills_frameworks">
+            Frameworks
+          </Label>
+          <Input
+            type="text"
+            id="skills_frameworks"
+            value={newSkills.frameworks}
+            onChange={(newFrameworks) =>
+              setNewSkills({
+                ...newSkills,
+                frameworks: newFrameworks.target.value,
+              })
+            }
+            placeholder={skills.data?.frameworks ?? "React, Node.js, Flask"}
+          />
+        </div>
+        <div className="grid w-full items-center gap-1.5">
+          <Label className="text-xl" htmlFor="skills_developerTools">
+            Developer Tools
+          </Label>
+          <Input
+            type="text"
+            id="skills_developerTools"
+            value={newSkills.developerTools}
+            onChange={(newDeveloperTools) =>
+              setNewSkills({
+                ...newSkills,
+                developerTools: newDeveloperTools.target.value,
+              })
+            }
+            placeholder={skills.data?.developerTools ?? "Git, Docker"}
+          />
+        </div>
+        <div className="grid w-full items-center gap-1.5">
+          <Label className="text-xl" htmlFor="skills_libraries">
+            Libraries
+          </Label>
+          <Input
+            type="text"
+            id="skills_libraries"
+            value={newSkills.libraries}
+            onChange={(newLibraries) =>
+              setNewSkills({
+                ...newSkills,
+                libraries: newLibraries.target.value,
+              })
+            }
+            placeholder={skills.data?.libraries ?? "pandas, NumPy"}
+          />
+        </div>
+        <Button
+          className="mt-4"
+          onClick={() => upsertSkillMutation.mutate(newSkills)}
+        >
+          Save Changes
+        </Button>
       </div>
     </>
   );
