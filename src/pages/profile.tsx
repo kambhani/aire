@@ -116,7 +116,7 @@ export default function Profile() {
       <h1 className="my-8 text-center text-4xl font-semibold">
         Profile Information
       </h1>
-      <h2 className="mx-auto px-2 text-2xl text-blue-800 dark:text-blue-200 md:w-11/12">
+      <h2 className="mx-auto px-2 text-2xl font-bold md:w-11/12">
         Metadata
       </h2>
       <div className="mx-auto grid w-full grid-cols-1 gap-4 px-2 md:w-11/12 lg:grid-cols-2 2xl:grid-cols-3">
@@ -229,18 +229,19 @@ export default function Profile() {
       </div>
       <div className="mx-auto mt-4 px-2 md:w-11/12">
         <Button
-          variant="success"
+          className='bg-black'
           onClick={() => upsertMetadataMutation.mutate(newMetadata)}
         >
           Save changes
         </Button>
       </div>
       <div className="mx-auto mt-8 px-2 md:w-11/12">
-        <h2 className="text-2xl text-blue-800 dark:text-blue-200">Education</h2>
-        <div className="flex justify-end">
+        <div className="flex justify-between">
+          <h2 className="text-2xl font-bold">Education</h2>
+
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="success">+ Add Eduction</Button>
+              <Button className='bg-black'>+ Add Eduction</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
@@ -319,7 +320,7 @@ export default function Profile() {
               {educations.data.map((element) => (
                 <div
                   key={element.id}
-                  className="flex w-full flex-row justify-between rounded-xl bg-blue-200 p-4 dark:bg-blue-800"
+                  className="flex w-full flex-row justify-between rounded-xl border-2 p-4"
                 >
                   <div>
                     <h3 className="text-xl font-semibold">{element.school}</h3>
@@ -328,7 +329,7 @@ export default function Profile() {
 
                   </div>
                   <div className="my-auto flex h-full gap-4">
-                    <Button variant="destructive" size="icon">
+                    <Button variant="destructive" size="icon" className='bg-transparent text-red-400'>
                       <Trash2
                         className="h-4 w-4"
                         onClick={() =>
@@ -344,13 +345,13 @@ export default function Profile() {
         </div>
       </div>
       <div className="mx-auto mt-8 px-2 md:w-11/12">
-        <h2 className="text-2xl text-blue-800 dark:text-blue-200">
-          Experience
-        </h2>
-        <div className="flex justify-end">
+
+        <div className="flex justify-between">
+          <h2 className="text-2xl font-bold ">Experience</h2>
+
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="success">+ Add Experience</Button>
+              <Button className='bg-black'>+ Add Experience</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
@@ -458,7 +459,7 @@ export default function Profile() {
               {experiences.data.map((element) => (
                 <div
                   key={element.id}
-                  className="flex w-full flex-row justify-between rounded-xl bg-blue-200 p-4 dark:bg-blue-800"
+                  className="flex w-full flex-row justify-between rounded-xl border-2 p-4"
                 >
                   <div>
                     <h3 className="text-xl font-semibold">{element.company}</h3>
@@ -470,7 +471,7 @@ export default function Profile() {
 
                   </div>
                   <div className="my-auto flex h-full gap-4">
-                    <Button variant="destructive" size="icon">
+                    <Button variant="destructive" size="icon" className='bg-transparent text-red-400'>
                       <Trash2
                         className="h-4 w-4"
                         onClick={() =>
@@ -486,11 +487,12 @@ export default function Profile() {
         </div>
       </div>
       <div className="mx-auto mt-8 px-2 md:w-11/12">
-        <h2 className="text-2xl text-blue-800 dark:text-blue-200">Projects</h2>
-        <div className="flex justify-end">
+        <div className="flex justify-between">
+          <h2 className="text-2xl font-bold ">Projects</h2>
+
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="success">+ Add Project</Button>
+              <Button variant="" className='bg-black text-white'>+ Add Project</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
@@ -580,14 +582,16 @@ export default function Profile() {
               {projects.data.map((element) => (
                 <div
                   key={element.id}
-                  className="flex w-full flex-row justify-between rounded-xl bg-blue-200 p-4 dark:bg-blue-800"
+                  className="flex w-full flex-row justify-between rounded-xl border-2 p-4 dark:bg-blue-800"
                 >
                   <div>
                     <h3 className="text-xl font-semibold">{element.name}</h3>
-                    <h4 className="font-light">{element.technologies}</h4>
+                    <h4 className="font-light"><span className='font-bold'>Technologies: </span>{element.technologies}</h4>
+                    <h4 className="font-light"><span className='font-bold'>Timeframe: </span>{element.timeframe}</h4>
+                    <p className="font-light"><span className='font-bold'>Description: </span>{element.description}</p>
                   </div>
                   <div className="my-auto flex h-full gap-4">
-                    <Button variant="destructive" size="icon">
+                    <Button variant="destructive" size="icon" className='bg-transparent text-red-400'>
                       <Trash2
                         className="h-4 w-4"
                         onClick={() =>
