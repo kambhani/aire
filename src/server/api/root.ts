@@ -3,6 +3,7 @@ import { experienceRouter } from "./routers/experience";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { educationRouter } from "./routers/education";
 import { projectRouter } from "./routers/project";
+import { metadataRouter } from "./routers/metadata";
 
 /**
  * This is the primary router for your server.
@@ -11,6 +12,7 @@ import { projectRouter } from "./routers/project";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
+  metadata: metadataRouter,
   experience: experienceRouter,
   education: educationRouter,
   project: projectRouter,

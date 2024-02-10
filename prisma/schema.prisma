@@ -31,7 +31,7 @@ model Metadata {
     id       String  @id @default(cuid())
     name     String?
     location String?
-    metadata String?
+    email    String?
     phone    String?
     linkedin String?
     github   String?

@@ -21,6 +21,19 @@ export default function Profile() {
   const { data: sessionData } = useSession();
   const utils = api.useUtils();
 
+  const [newMetadata, setNewMetadata] = useState({
+    name: "",
+    location: "",
+    email: "",
+    phone: "",
+    linkedin: "",
+    github: "",
+  });
+  const metadata = api.metadata.getUserMetadata.useQuery();
+  const upsertMetadataMutation = api.metadata.edit.useMutation({
+    onSuccess: () => utils.metadata.invalidate(),
+  });
+
   const [newEducation, setNewEducation] = useState({
     school: "",
     degree: "",
@@ -76,25 +89,60 @@ export default function Profile() {
           <Label className="text-xl" htmlFor="name">
             Name
           </Label>
-          <Input type="text" id="name" placeholder="FirstName LastName" />
+          <Input
+            type="text"
+            id="name"
+            value={newMetadata.name}
+            onChange={(newName) =>
+              setNewMetadata({ ...newMetadata, name: newName.target.value })
+            }
+            placeholder={metadata.data?.name ?? "First Last"}
+          />
         </div>
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label className="text-xl" htmlFor="location">
             Location
           </Label>
-          <Input type="text" id="location" placeholder="City, State" />
+          <Input
+            type="text"
+            id="location"
+            value={newMetadata.location}
+            onChange={(newLocation) =>
+              setNewMetadata({
+                ...newMetadata,
+                location: newLocation.target.value,
+              })
+            }
+            placeholder={metadata.data?.location ?? "City, State"}
+          />
         </div>
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label className="text-xl" htmlFor="email">
             Email
           </Label>
-          <Input type="email" id="email" placeholder="email@email.com" />
+          <Input
+            type="email"
+            id="email"
+            value={newMetadata.email}
+            onChange={(newEmail) =>
+              setNewMetadata({ ...newMetadata, email: newEmail.target.value })
+            }
+            placeholder={metadata.data?.email ?? "email@email.com"}
+          />
         </div>
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label className="text-xl" htmlFor="phone">
             Phone
           </Label>
-          <Input type="tel" id="phone" placeholder="+1" />
+          <Input
+            type="tel"
+            id="phone"
+            value={newMetadata.phone}
+            onChange={(newPhone) =>
+              setNewMetadata({ ...newMetadata, phone: newPhone.target.value })
+            }
+            placeholder={metadata.data?.phone ?? "+1"}
+          />
         </div>
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label className="text-xl" htmlFor="linkedin">
@@ -103,18 +151,40 @@ export default function Profile() {
           <Input
             type="url"
             id="linkedin"
-            placeholder="https://www.linkedin.com/in/"
+            value={newMetadata.linkedin}
+            onChange={(newLinkedin) =>
+              setNewMetadata({
+                ...newMetadata,
+                linkedin: newLinkedin.target.value,
+              })
+            }
+            placeholder={
+              metadata.data?.linkedin ?? "https://www.linkedin.com/in/"
+            }
           />
         </div>
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label className="text-xl" htmlFor="github">
             GitHub
           </Label>
-          <Input type="url" id="github" placeholder="https://github.com/" />
+          <Input
+            type="url"
+            id="github"
+            value={newMetadata.github}
+            onChange={(newGithub) =>
+              setNewMetadata({ ...newMetadata, github: newGithub.target.value })
+            }
+            placeholder={metadata.data?.linkedin ?? "https://github.com/"}
+          />
         </div>
       </div>
       <div className="mx-auto mt-4 px-2 md:w-11/12">
-        <Button variant="success">Save changes</Button>
+        <Button
+          variant="success"
+          onClick={() => upsertMetadataMutation.mutate(newMetadata)}
+        >
+          Save changes
+        </Button>
       </div>
       <div className="mx-auto mt-8 px-2 md:w-11/12">
         <h2 className="text-2xl text-blue-800 dark:text-blue-200">Education</h2>
