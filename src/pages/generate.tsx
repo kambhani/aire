@@ -23,6 +23,7 @@ export default function Generate() {
 
   return (
     <>
+      <title>Generate Resume | aire</title>
       {!submitted && (
         <div className="mx-auto mt-24 grid w-full px-8">
           <div className="mx-auto">
