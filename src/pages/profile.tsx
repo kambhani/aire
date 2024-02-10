@@ -2,9 +2,12 @@ import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { useSession } from "next-auth/react";
 import { Button } from "~/components/ui/button";
+import { api } from "~/utils/api";
 
 export default function Profile() {
   const { data: sessionData } = useSession();
+
+  const experiences = api.experience.getUserExperience.useQuery();
 
   return (
     <>
@@ -63,6 +66,22 @@ export default function Profile() {
         <h2 className="text-2xl text-blue-800 dark:text-blue-200">
           Experience
         </h2>
+        <div className="flex justify-end">
+          <Button variant="success">+ Add Experience</Button>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          {experiences.data && (
+            <>
+              {experiences.data.forEach((element) => (
+                <div className="w-full">
+                  <h3>{element.company}</h3>
+                  <h4>{element.role}</h4>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
       </div>
     </>
   );
