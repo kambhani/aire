@@ -113,9 +113,10 @@ export default function Profile() {
   return (
     <>
       <title>Profile | aire</title>
-      <h1 className="my-8 text-center text-4xl font-semibold">
+      <h1 className="mt-8 text-center text-4xl font-semibold">
         Profile Information
       </h1>
+      <p className='text-slate-400 text-center mb-8 mt-2'>Profile information is used to generate your custom resume.</p>
       <h2 className="mx-auto px-2 text-2xl font-bold md:w-11/12">
         Metadata
       </h2>
