@@ -10,7 +10,7 @@ export const resumeRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const user = ctx.db.user.findFirstOrThrow({
+      const user = await ctx.db.user.findFirstOrThrow({
         where: {
           id: ctx.session.user.id,
         },
@@ -23,6 +23,8 @@ export const resumeRouter = createTRPCRouter({
       });
 
       // make llm call with input.description and user
+      console.log(user);
+      console.log(input.description);
 
       const ret = {
         match: 18,
