@@ -1,3 +1,5 @@
 export default function UploadResume() {
-  return <div></div>;
+  return <div>
+    <title>Upload Resume | aire</title>
+  </div>;
 }

@@ -141,6 +141,7 @@ export default function Profile() {
 
   return (
     <>
+      <title>Profile | aire</title>
       <h1 className="my-8 text-center text-4xl font-semibold">
         Profile Information
       </h1>
