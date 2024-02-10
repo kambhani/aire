@@ -121,7 +121,7 @@ export default function LandingResume() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.3 }}
-      className="flex aspect-[2/3] w-full max-w-md select-none flex-col justify-between rounded-sm bg-white p-4 font-serif text-sm drop-shadow-xl"
+      className="flex aspect-[2/3] w-full max-w-md select-none flex-col justify-between rounded-sm bg-white p-10 font-serif text-sm text-black drop-shadow-xl"
     >
       <p className="text-center text-xl font-bold">John Doe</p>
       <div className="mx-auto flex items-center gap-4 text-center">

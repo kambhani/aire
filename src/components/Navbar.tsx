@@ -37,7 +37,7 @@ export default function Navbar() {
             className="px-6"
             onClick={sessionData ? () => void signOut() : () => void signIn()}
           >
-            {sessionData ? "Sign out" : "Sign in"}
+            {sessionData ? "Sign Out" : "Sign In"}
           </Button>
           <ModeToggle />
         </div>
