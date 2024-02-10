@@ -3,32 +3,28 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
-export const experienceRouter = createTRPCRouter({
+export const educationRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        company: z.string().min(1),
-        role: z.string().min(1),
+        school: z.string().min(1),
+        degree: z.string().min(1),
         timeframe: z.string().min(1),
-        location: z.string().min(1),
-        description: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.experience.create({
+      return ctx.db.education.create({
         data: {
-          company: input.company,
-          role: input.role,
+          school: input.school,
+          degree: input.degree,
           timeframe: input.timeframe,
-          location: input.location,
-          description: input.description,
           userId: ctx.session.user.id,
         },
       });
     }),
 
-  getUserExperience: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.experience.findMany({
+  getUserEducation: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.education.findMany({
       where: {
         userId: ctx.session.user.id,
       },
@@ -42,20 +38,20 @@ export const experienceRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const experience = await ctx.db.experience.findFirstOrThrow({
+      const education = await ctx.db.education.findFirstOrThrow({
         where: {
           id: input.id,
         },
       });
 
-      if (experience.userId != ctx.session.user.id) {
+      if (education.userId != ctx.session.user.id) {
         throw new TRPCError({
           message: "Cannot delete another user's experience!",
           code: "FORBIDDEN",
         });
       }
 
-      return ctx.db.experience.delete({
+      return ctx.db.education.delete({
         where: {
           id: input.id,
         },
