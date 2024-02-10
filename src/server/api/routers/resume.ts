@@ -1,14 +1,12 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const resumeRouter = createTRPCRouter({
   generate: protectedProcedure
     .input(
       z.object({
-        description: z.optional(z.string()),
-        jobUrl: z.optional(z.string()),
+        description: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -24,27 +22,7 @@ export const resumeRouter = createTRPCRouter({
         },
       });
 
-      if (
-        (!input.jobUrl || input.jobUrl.length == 0) &&
-        (!input.description || input.description.length == 0)
-      ) {
-        throw new TRPCError({
-          message: "You must enter either a job url or job description",
-          code: "BAD_REQUEST",
-        });
-      }
-
-      let description = "";
-      if (input.jobUrl) {
-        // Do some processing to this to get the job description
-        // Prob just a call to some llm with the url html as input
-        description = "We want SQL experience and Typescript experience.";
-      }
-      if (input.description) {
-        description = input.description; // Actual job description will overwrite URL
-      }
-
-      // Perform the LLM stuff here, and get the response URLs
+      // make llm call with input.description and user
 
       const ret = {
         match: 18,

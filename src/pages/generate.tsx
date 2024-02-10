@@ -50,21 +50,11 @@ export default function Generate() {
               }
             />
 
-            <p className="text-lg font-bold">Or, enter the job posting URL:</p>
-
-            <Input
-              className="mx-auto mb-4 mt-4 max-w-xl"
-              placeholder="https://www.example.com"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-            />
-
             <Button
               className="bg-black"
               onClick={() =>
                 generateMutation.mutate({
                   description: description,
-                  jobUrl: url,
                 })
               }
             >
