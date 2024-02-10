@@ -16,10 +16,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <ThemeProvider attribute="class">
       <SessionProvider session={session}>
-        <div className="flex min-h-screen flex-col">
-          <div className="grow">
+        <div className="mx-auto flex min-h-screen flex-col">
+          <div className="flex min-h-screen grow flex-col">
             <Navbar />
-            <div>
+            <div className="mx-auto flex w-full max-w-7xl grow flex-col p-4">
               <Component {...pageProps} />
             </div>
           </div>
