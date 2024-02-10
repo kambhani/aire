@@ -3,6 +3,8 @@ import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { api } from "~/utils/api";
+import { toast } from "sonner";
 
 export default function Generate() {
   const { data: sessionData } = useSession();
@@ -10,16 +12,23 @@ export default function Generate() {
   const [url, setUrl] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const [userText, setUserText] = useState("");
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    setTimeout(() => {
+  const generateMutation = api.resume.generate.useMutation({
+    onMutate: () => {
+      setLoading(true);
+    },
+    onSuccess: () => {
       setSubmitted(true);
       setLoading(false);
-    }, 1000);
-  };
+    },
+    onError: () => {
+      toast("Generation failed");
+    },
+    onSettled: () => {
+      setLoading(false);
+    },
+  });
 
   return (
     <>
@@ -50,35 +59,36 @@ export default function Generate() {
               onChange={(e) => setUrl(e.target.value)}
             />
 
-            <Button className="bg-black" onClick={handleSubmit}>
+            <Button
+              className="bg-black"
+              onClick={() =>
+                generateMutation.mutate({
+                  description: description,
+                  jobUrl: url,
+                })
+              }
+            >
               {loading ? "Loading..." : "Submit"}
             </Button>
           </div>
         </div>
       )}
 
-      {submitted && (
+      {submitted && generateMutation.data && (
         <div className="mx-auto mt-24 grid w-full grid-cols-1 gap-16 px-8 sm:grid-cols-2">
           <div>
             <h1 className="text-xl font-bold">
               Current resume match:{" "}
-              <span className="text-3xl text-red-600">18%</span>
+              <span className="text-3xl text-red-600">
+                {generateMutation.data.match}%
+              </span>
             </h1>
 
             <h1 className="mt-4 text-xl font-bold">Suggestions</h1>
             <ul className="ml-8 mt-2 list-disc">
-              <li>
-                Expand on your projects section to showcase your skills to
-                employers
-              </li>
-              <li>
-                You do not need so many things in the awards section because it
-                distracts from the overall point in your resume
-              </li>
-              <li>
-                High school experiences are not always needed on a resume once
-                you are in college, consider removing them
-              </li>
+              {generateMutation.data.suggestions.map((suggestion) => (
+                <li key={suggestion}>{suggestion}</li>
+              ))}
             </ul>
 
             <div className="ml-2">
@@ -102,20 +112,20 @@ export default function Generate() {
               <li>
                 <span className="font-bold">Generated Resume: </span>
                 <a
-                  href="https://www.overleaf.com/latex/templates/swe-resume-template/bznbzdprjfyy"
+                  href={generateMutation.data.urls[0]}
                   className="text-blue-400"
                 >
-                  https://www.overleaf.com/latex/templates/swe-resume-template/bznbzdprjfyy
+                  {generateMutation.data.urls[0]}
                 </a>
               </li>
 
               <li>
                 <span className="font-bold">Generated Cover Letter: </span>
                 <a
-                  href="https://www.overleaf.com/latex/templates/swe-resume-template/bznbzdprjfyy"
+                  href={generateMutation.data.urls[1]}
                   className="text-blue-400"
                 >
-                  https://www.overleaf.com/latex/templates/swe-resume-template/bznbzdprjfyy
+                  {generateMutation.data.urls[1]}
                 </a>
               </li>
             </ul>
@@ -130,24 +140,6 @@ export default function Generate() {
           </div>
         </div>
       )}
-
-      {/* <div className="">
-        <h2 className="mb-4 text-4xl">Paste job description here</h2>
-        <Textarea
-          className="mb-4 h-80 w-full"
-          value={description}
-          onChange={(newDescription) =>
-            setDescription(newDescription.target.value)
-          }
-        />
-        <Button>Generate Resume</Button>
-      </div>
-      <div className="h-80 w-full">
-        <h2 className="mb-4 text-4xl">Resume + cover letter here</h2>
-        <div className="h-80 w-full border border-slate-900 dark:border-slate-100">
-          outputted resume goes here
-        </div>
-      </div> */}
     </>
   );
 }

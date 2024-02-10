@@ -317,7 +317,10 @@ export default function Profile() {
           {educations.data && (
             <>
               {educations.data.map((element) => (
-                <div className="flex w-full flex-row justify-between rounded-xl bg-blue-200 p-4 dark:bg-blue-800">
+                <div
+                  key={element.id}
+                  className="flex w-full flex-row justify-between rounded-xl bg-blue-200 p-4 dark:bg-blue-800"
+                >
                   <div>
                     <h3 className="text-xl font-semibold">{element.school}</h3>
                     <h4 className="font-light">{element.degree}</h4>
@@ -451,7 +454,10 @@ export default function Profile() {
           {experiences.data && (
             <>
               {experiences.data.map((element) => (
-                <div className="flex w-full flex-row justify-between rounded-xl bg-blue-200 p-4 dark:bg-blue-800">
+                <div
+                  key={element.id}
+                  className="flex w-full flex-row justify-between rounded-xl bg-blue-200 p-4 dark:bg-blue-800"
+                >
                   <div>
                     <h3 className="text-xl font-semibold">{element.company}</h3>
                     <h4 className="font-light">{element.role}</h4>
@@ -565,7 +571,10 @@ export default function Profile() {
           {projects.data && (
             <>
               {projects.data.map((element) => (
-                <div className="flex w-full flex-row justify-between rounded-xl bg-blue-200 p-4 dark:bg-blue-800">
+                <div
+                  key={element.id}
+                  className="flex w-full flex-row justify-between rounded-xl bg-blue-200 p-4 dark:bg-blue-800"
+                >
                   <div>
                     <h3 className="text-xl font-semibold">{element.name}</h3>
                     <h4 className="font-light">{element.technologies}</h4>
