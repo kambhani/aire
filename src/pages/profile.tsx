@@ -16,6 +16,7 @@ import {
 import { Textarea } from "~/components/ui/textarea";
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function Profile() {
   const { data: sessionData } = useSession();
@@ -31,8 +32,17 @@ export default function Profile() {
   });
   const metadata = api.metadata.getUserMetadata.useQuery();
   const upsertMetadataMutation = api.metadata.edit.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
       utils.metadata.invalidate();
+      setNewMetadata({
+        name: data.name ?? "",
+        location: data.location ?? "",
+        email: data.email ?? "",
+        phone: data.phone ?? "",
+        linkedin: data.linkedin ?? "",
+        github: data.github ?? "",
+      });
+      toast("Metadata updated!");
     },
   });
 

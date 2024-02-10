@@ -2,7 +2,7 @@ import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import { type AppType } from "next/app";
-
+import { Toaster } from "~/components/ui/sonner";
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
@@ -23,6 +23,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
               <Component {...pageProps} />
             </div>
           </div>
+          <Toaster />
           <Footer />
         </div>
       </SessionProvider>
