@@ -324,6 +324,8 @@ export default function Profile() {
                   <div>
                     <h3 className="text-xl font-semibold">{element.school}</h3>
                     <h4 className="font-light">{element.degree}</h4>
+                    <h4 className="font-light">{element.timeframe}</h4>
+
                   </div>
                   <div className="my-auto flex h-full gap-4">
                     <Button variant="destructive" size="icon">
@@ -461,6 +463,11 @@ export default function Profile() {
                   <div>
                     <h3 className="text-xl font-semibold">{element.company}</h3>
                     <h4 className="font-light">{element.role}</h4>
+                    <h4 className="font-light">{element.timeframe}</h4>
+
+                    <h4 className="font-light">{element.location}</h4>
+                    <p>{element.description}</p>
+
                   </div>
                   <div className="my-auto flex h-full gap-4">
                     <Button variant="destructive" size="icon">
