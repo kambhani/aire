@@ -19,7 +19,18 @@ export default function Navbar() {
               className="dark:invert"
             />
           </Link>
+
         </div>
+
+        <div className='flex gap-4'>
+          <p><a href="/generate">Generate</a></p>
+
+          <p><a href="/upload-resume">Upload</a></p>
+
+          <p><a href="/profile">Profile</a></p>
+        </div>
+
+
         <div className="flex items-center gap-2">
           <Button
             variant="default"
