@@ -1,5 +1,12 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+const { OpenAI } = require("openai");
+import { env } from "~/env";
+
+const openai = new OpenAI({
+  apiKey: env.OPENAI_API_KEY
+});
+
 
 const resumeTemplate = (output: {
   metadata: {
@@ -398,8 +405,35 @@ export const resumeRouter = createTRPCRouter({
       });
 
       // make llm call with input.description and user
-      //console.log(user);
-      //console.log(input.description);
+      console.log(user);
+
+      const prompt = `I am trying to create a customized cover letter for a job posting. The job description is: 
+      --- 
+      
+      ${input.description}
+
+      --- 
+      Additionally, all of my information is listed below:
+
+      ${user}
+
+      Please respond with a cover letter formatted as plaintext. Please do not include a greeting or a closing. In other words, do not include the "dear ..." and do not include the "sincerely, ...".
+      `
+
+      const resp = await await openai.chat.completions.create({
+        messages: [{"role": "user", "content": prompt}],
+
+        model: "gpt-3.5-turbo",
+      });
+      
+      const chatGPTCoverLetterString = resp.choices[0].message.content;
+
+      console.log(chatGPTCoverLetterString)
+
+  
+        
+
+      // console.log(input.description);
 
       const response = {
         projects: [
@@ -441,16 +475,14 @@ export const resumeRouter = createTRPCRouter({
         ],
       };
 
-      const coverLetterBody = "sample text";
-
       const resumeInput = {
         ...response,
         metadata: user.metadata,
         education: user.educations,
-        body: coverLetterBody,
+        body: chatGPTCoverLetterString,
       };
 
-      console.log(resumeTemplate(resumeInput));
+      // console.log(resumeTemplate(resumeInput));
 
       const ret = {
         match: Math.floor(Math.random() * 50 + 50),
