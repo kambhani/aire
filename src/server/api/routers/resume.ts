@@ -213,6 +213,7 @@ const resumeTemplate = (output: {
               return String.raw`\resumeItem{${bullet}}`;
             })
             .join("")}
+            \resumeItemListEnd
         `;
         })
         .join("")}
