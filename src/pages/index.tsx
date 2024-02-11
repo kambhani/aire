@@ -16,17 +16,17 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex grow">
-        <div className="flex max-h-full grow flex-col items-center gap-4 align-middle md:flex-row md:justify-between md:gap-0">
+        <div className="flex max-h-full grow flex-col items-center gap-8 align-middle md:flex-row md:justify-between md:gap-0">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col text-center align-middle font-serif text-5xl font-bold md:text-left mt-8"
+            className="flex flex-col gap-4 text-center align-middle font-serif text-5xl font-bold md:text-left mt-8"
           >
-            <p>Take your resume</p>
-            <p className="bg-gradient-to-r from-black to-slate-400 bg-clip-text text-transparent dark:from-white dark:to-slate-300">
-              to the next level
-            </p>
+            <p className='leading-tight'>Automatically tailor your resume  <span className="bg-gradient-to-r from-black to-slate-400 bg-clip-text text-transparent dark:from-white dark:to-slate-300">
+              to each job posting.
+            </span></p>
+
             <div>
               <a href="/auth/signin">
                 <Button>Get Started</Button>
