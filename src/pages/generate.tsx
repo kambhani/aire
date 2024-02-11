@@ -4,15 +4,14 @@ import { Button } from "~/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { api } from "~/utils/api";
 import { toast } from "sonner";
-import { Progress } from "~/components/ui/progress"
-
+import { Progress } from "~/components/ui/progress";
 
 export default function Generate() {
   const [description, setDescription] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userText, setUserText] = useState("");
-  const [progress, setProgress] = useState(0)
+  const [progress, setProgress] = useState(0);
 
   let count = 0;
 
@@ -35,12 +34,11 @@ export default function Generate() {
   useEffect(() => {
     let count = 0;
     const interval = setInterval(() => {
-      count += 500
-      setProgress(count / (45 * 1000) * 100)
-    }, 500)
+      count += 500;
+      setProgress((count / (45 * 1000)) * 100);
+    }, 500);
 
     return () => clearInterval(interval);
-
   }, [loading]);
 
   function hslToRgb(h, s, l) {
@@ -71,9 +69,9 @@ export default function Generate() {
   function numberToColorHsl(i) {
     // as the function expects a value between 0 and 1, and red = 0° and green = 120°
     // we convert the input to the appropriate hue value
-    var hue = i * 1.2 / 360;
+    var hue = (i * 1.2) / 360;
     // we convert hsl to rgb (saturation 100%, lightness 50%)
-    var rgb = hslToRgb(hue, 1, .5);
+    var rgb = hslToRgb(hue, 1, 0.5);
     // we format to css value and return
     // return 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
     return rgbToHex(rgb[0], rgb[1], rgb[2]);
@@ -88,18 +86,15 @@ export default function Generate() {
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
   }
 
-
-
-
   // text-[rgb()]
 
   return (
     <>
       <title>Generate Resume | aire</title>
       {!submitted && (
-        <div className="mx-auto mt-24 grid w-full px-8">
+        <div className="mx-auto mt-8 grid w-full">
           <div className="mx-auto">
-            <h1 className="text-xl font-bold">Job Description</h1>
+            <h1 className="text-2xl font-bold">Job Description</h1>
             <p className=" text-sm text-slate-400">
               Please copy and paste the job description for the posting you have
               found below
@@ -118,11 +113,10 @@ export default function Generate() {
               onClick={() => {
                 generateMutation.mutate({
                   description: description,
-                })
+                });
 
                 setLoading(true);
-              }
-              }
+              }}
             >
               {loading ? "Loading..." : "Submit"}
             </Button>
@@ -133,11 +127,14 @@ export default function Generate() {
       )}
 
       {submitted && generateMutation.data && (
-        <div className="mx-auto mt-24 grid w-full grid-cols-1 gap-16 px-8 sm:grid-cols-2">
+        <div className="mx-auto mt-8 grid w-full grid-cols-1 gap-16 sm:grid-cols-2">
           <div>
-            <h1 className="text-xl font-bold">
+            <h1 className="text-2xl font-bold">
               Current resume match:{" "}
-              <span className={`text-3xl`} style={{ color: numberToColorHsl(generateMutation.data.match) }}>
+              <span
+                className={`text-3xl`}
+                style={{ color: numberToColorHsl(generateMutation.data.match) }}
+              >
                 {generateMutation.data.match}%
               </span>
             </h1>

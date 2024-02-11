@@ -1,5 +1,5 @@
 import { Button } from "~/components/ui/button";
-import { ArrowRight, Upload } from "lucide-react";
+import { ArrowRight, Send, Upload } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import axios from "axios";
 import OpenAI from "openai";
@@ -58,7 +58,7 @@ export default function UploadResume() {
 
   return (
     <div>
-      <p className="mx-auto mb-4 w-full max-w-xl text-3xl font-bold">
+      <p className="mx-auto mb-4 mt-8 w-full max-w-xl text-2xl font-bold">
         Upload Resume
       </p>
       <div className="flex flex-col gap-4">
@@ -70,26 +70,27 @@ export default function UploadResume() {
         )}
         {!selectedFile ? (
           <>
-            <div className="grid aspect-square w-full items-center bg-gray-400 dark:bg-gray-500">
-              <Upload className="h-8 w-8" />
-              No file uploaded
+            <div className="mx-auto grid aspect-[5/4] w-full max-w-xl items-center rounded-md bg-slate-100 dark:bg-slate-900">
+              <div className="flex flex-col items-center gap-4 font-semibold dark:opacity-80">
+                <Upload className="h-16 w-16 opacity-50" />
+                <p className="opacity-50">No File Selected</p>
+                <label
+                  htmlFor="file-upload"
+                  className="mx-auto flex w-fit cursor-pointer flex-col items-center gap-2 rounded-md bg-black px-4 py-2 text-center font-semibold text-white opacity-100  dark:bg-white dark:text-black"
+                >
+                  Browse Files
+                </label>
+              </div>
             </div>
-            <label
-              htmlFor="file-upload"
-              className="mx-auto flex w-fit cursor-pointer items-center gap-2 rounded-md bg-black px-4 py-2 text-center font-semibold text-white dark:bg-white dark:text-black"
-            >
-              Upload Resume
-              <Upload className="h-4 w-4" />
-            </label>
           </>
         ) : (
           <div className="mx-auto w-fit">
             <Button
               onClick={() => submitResume()}
-              className="group relative flex items-center gap-2 text-center transition-transform duration-200 ease-in"
+              className="group relative flex items-center gap-2 text-center transition-transform duration-100 ease-in"
             >
-              Send Resume
-              <ArrowRight className="h-4 w-4 scale-0 opacity-0 transition-all duration-200 ease-in group-hover:block group-hover:scale-100 group-hover:opacity-100" />
+              <p>Send Resume</p>
+              <ArrowRight className="h-4 w-4 transition-all duration-100 ease-in group-hover:translate-x-1" />
             </Button>
           </div>
         )}
