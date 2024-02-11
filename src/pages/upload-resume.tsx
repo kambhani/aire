@@ -4,11 +4,30 @@ import { ChangeEvent, useState } from "react";
 import axios from "axios";
 import OpenAI from "openai";
 import { env } from "~/env";
+import { api } from "~/utils/api";
+import { redirect } from "next/navigation";
 
 export default function UploadResume() {
+  const utils = api.useUtils();
   const [selectedFile, setSelectedFile] = useState<File | null | undefined>(
     null,
   );
+  const parseResumeMutation = api.resume.parseResume.useMutation({
+    onSuccess: () => {
+      void utils.invalidate();
+      console.log("success");
+    },
+  });
+  async function getBase64(file: File) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = reject;
+    });
+  }
   const [encoding, setEncoding] = useState<string>();
   const [url, setUrl] = useState<string>("");
   const [response, setResponse] = useState<string>();
@@ -30,7 +49,9 @@ export default function UploadResume() {
     const formData = new FormData();
     if (!selectedFile) return;
     formData.append("file", selectedFile);
-    const response = await fetch(
+    const file_base64 = (await getBase64(selectedFile)) as string;
+    parseResumeMutation.mutate({ resume: file_base64 });
+    /*const response = await fetch(
       "http://localhost:5000/upload-file-to-cloud-storage",
       {
         method: "POST",
@@ -41,7 +62,7 @@ export default function UploadResume() {
     const responseWithBody = await response.json();
     if (!responseWithBody) return;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
-    setResponse(responseWithBody.body);
+    setResponse(responseWithBody.body);*/
     // if (!encoding) return;
     // const form = new FormData();
     // form.append("providers", "affinda");
@@ -90,7 +111,7 @@ export default function UploadResume() {
         ) : (
           <div className="mx-auto w-fit">
             <Button
-              onClick={submitResume}
+              onClick={() => submitResume()}
               className="group relative flex items-center gap-2 text-center transition-transform duration-200 ease-in"
             >
               Send Resume
