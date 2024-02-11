@@ -54,48 +54,13 @@ export default function UploadResume() {
       resume: file_base64,
       name: selectedFile.name,
     });
-    /*const response = await fetch(
-      "http://localhost:5000/upload-file-to-cloud-storage",
-      {
-        method: "POST",
-        body: formData,
-      },
-    );
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const responseWithBody = await response.json();
-    if (!responseWithBody) return;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
-    setResponse(responseWithBody.body);*/
-    // if (!encoding) return;
-    // const form = new FormData();
-    // form.append("providers", "affinda");
-    // form.append("file", URL.createObjectURL(selectedFile));
-    // form.append("fallback_providers", "");
-
-    // const options = {
-    //   method: "POST",
-    //   url: "https://api.edenai.run/v2/ocr/resume_parser",
-    //   headers: {
-    //     Authorization:
-    //       "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmRlODQ3MjYtMGMyYi00N2VjLWFhNTktYzI4NjA2YjRlNjNiIiwidHlwZSI6ImFwaV90b2tlbiJ9.7ZzVqitjAtbt_gvcSOPr9Hi5pT7i9PfuORpV-jvt7UI",
-    //     "Content-Type": "multipart/form-data;",
-    //   },
-    //   data: form,
-    // };
-
-    // axios
-    //   .request(options)
-    //   .then((response) => {
-    //     console.log(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
   }
 
   return (
     <div>
-      <p className="mb-4 text-3xl font-bold">Upload Resume</p>
+      <p className="mx-auto mb-4 w-full max-w-xl text-3xl font-bold">
+        Upload Resume
+      </p>
       <div className="flex flex-col gap-4">
         {encoding && selectedFile && (
           <div className="mx-auto hidden w-full max-w-xl md:block">
@@ -104,13 +69,19 @@ export default function UploadResume() {
           </div>
         )}
         {!selectedFile ? (
-          <label
-            htmlFor="file-upload"
-            className="mx-auto flex w-fit cursor-pointer items-center gap-2 rounded-md bg-black px-4 py-2 text-center font-semibold text-white dark:bg-white dark:text-black"
-          >
-            Upload Resume
-            <Upload className="h-4 w-4" />
-          </label>
+          <>
+            <div className="grid aspect-square w-full items-center bg-gray-400 dark:bg-gray-500">
+              <Upload className="h-8 w-8" />
+              No file uploaded
+            </div>
+            <label
+              htmlFor="file-upload"
+              className="mx-auto flex w-fit cursor-pointer items-center gap-2 rounded-md bg-black px-4 py-2 text-center font-semibold text-white dark:bg-white dark:text-black"
+            >
+              Upload Resume
+              <Upload className="h-4 w-4" />
+            </label>
+          </>
         ) : (
           <div className="mx-auto w-fit">
             <Button
