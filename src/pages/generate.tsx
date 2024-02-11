@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { api } from "~/utils/api";
 import { toast } from "sonner";
 import { Progress } from "~/components/ui/progress";
+import { ExternalLink, Link } from "lucide-react";
 
 export default function Generate() {
   const [description, setDescription] = useState("");
@@ -127,10 +128,10 @@ export default function Generate() {
       )}
 
       {submitted && generateMutation.data && (
-        <div className="mx-auto mt-8 grid w-full grid-cols-1 gap-16 sm:grid-cols-2">
+        <div className="mt-8">
           <div>
             <h1 className="text-2xl font-bold">
-              Current resume match:{" "}
+              Current Resume Match:{" "}
               <span
                 className={`text-3xl`}
                 style={{ color: numberToColorHsl(generateMutation.data.match) }}
@@ -138,73 +139,71 @@ export default function Generate() {
                 {generateMutation.data.match}%
               </span>
             </h1>
-
-            <h1 className="mt-4 text-xl font-bold">Suggestions</h1>
-            <ul className="ml-8 mt-2 list-disc">
-              {generateMutation.data.suggestions.map((suggestion) => (
-                <li key={suggestion}>{suggestion}</li>
-              ))}
-            </ul>
-
-            <div className="ml-2">
-              <Input
-                className="mx-auto mb-4 mt-4 max-w-xl"
-                placeholder="Ask a follow up question..."
-                value={userText}
-                onChange={(e) => setUserText(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div>
-            <h1 className="text-xl font-bold">Generated Resume</h1>
-            <p className="mt-2 text-sm text-slate-400">
-              Generated resume and cover letters are written in LaTeX and can be
-              accessed via the links below
-            </p>
-
-            <ul className="ml-8 mt-2 list-disc">
-              <li>
-                <span className="font-bold">Generated Resume: </span>
-                <form
-                  action="https://www.overleaf.com/docs"
-                  method="post"
-                  target="_blank"
-                >
-                  <input
-                    className="hidden"
-                    type="text"
-                    name="snip_uri"
-                    value={generateMutation.data.urls[0]}
-                  />
-                  <Button size="sm" type="submit" variant="success">
-                    Open in Overleaf
+            <div className="mx-auto mt-4 grid w-full grid-cols-1 gap-16 sm:grid-cols-2">
+              <div>
+                <h1 className="text-xl font-bold">Suggestions</h1>
+                <ul className="ml-8 mt-2 list-disc">
+                  {generateMutation.data.suggestions.map((suggestion) => (
+                    <li key={suggestion}>{suggestion}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold">Generated Resume</h1>
+                <p className="mt-2 text-sm text-slate-400">
+                  The resume and cover letter are written in LaTeX and can be
+                  accessed via the links below
+                </p>
+                <div className="mt-4 flex items-center gap-2">
+                  <form
+                    action="https://www.overleaf.com/docs"
+                    method="post"
+                    target="_blank"
+                  >
+                    <input
+                      className="hidden"
+                      type="text"
+                      name="snip_uri"
+                      value={generateMutation.data.urls[0]}
+                    />
+                    <Button
+                      size="sm"
+                      type="submit"
+                      variant="default"
+                      className="flex items-center gap-2"
+                    >
+                      Open Resume
+                      <ExternalLink className="h-4 w-4" />
+                    </Button>
+                  </form>
+                  <form
+                    action="https://www.overleaf.com/docs"
+                    method="post"
+                    target="_blank"
+                  >
+                    <input
+                      className="hidden"
+                      type="text"
+                      name="snip_uri"
+                      value={generateMutation.data.urls[1]}
+                    />
+                    <Button
+                      size="sm"
+                      type="submit"
+                      variant="secondary"
+                      className="flex items-center gap-2"
+                    >
+                      Open Cover Letter
+                      <ExternalLink className="h-4 w-4" />
+                    </Button>
+                  </form>
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-4">
+                  <Button onClick={() => setSubmitted(false)}>
+                    Enter another job description
                   </Button>
-                </form>
-              </li>
-              <li>
-                <span className="font-bold">Generated Cover Letter: </span>
-                <form
-                  action="https://www.overleaf.com/docs"
-                  method="post"
-                  target="_blank"
-                >
-                  <input
-                    className="hidden"
-                    type="text"
-                    name="snip_uri"
-                    value={generateMutation.data.urls[1]}
-                  />
-                  <Button size="sm" type="submit" variant="success">
-                    Open in Overleaf
-                  </Button>
-                </form>
-              </li>
-            </ul>
-            <div className="mt-4 grid grid-cols-2 gap-4">
-              <Button onClick={() => setSubmitted(false)}>
-                Enter another job description
-              </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

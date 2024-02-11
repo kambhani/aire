@@ -55,7 +55,7 @@ export default function LandingResume() {
       title: "Education",
       entries: [
         {
-          title: "Georiga Institute of Technology",
+          title: "Georgia Tech",
           bulletPoints: ["Bachelor of Science in Computer Science (4.00 GPA)"],
           startDate: "August 2022",
           endDate: "May 2026",
@@ -135,6 +135,13 @@ export default function LandingResume() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.3 }}
+      whileHover={{
+        x: -20,
+        transition: {
+          duration: 0.6,
+          delay: 0,
+        },
+      }}
       className="flex aspect-[2/3] w-full max-w-md select-none flex-col justify-between rounded-sm bg-white p-10 font-serif text-sm text-black drop-shadow-xl"
     >
       <p className="text-center text-xl font-bold">George P. Burdell</p>
