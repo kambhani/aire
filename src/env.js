@@ -31,18 +31,6 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
     OPENAI_API_KEY: z.string(),
-
-    GOOGLE_JSON_TYPE: z.string(),
-    GOOGLE_JSON_PROJECT_ID: z.string(),
-    GOOGLE_JSON_PRIVATE_KEY_ID: z.string(),
-    GOOGLE_JSON_PRIVATE_KEY: z.string(),
-    GOOGLE_JSON_CLIENT_EMAIL: z.string(),
-    GOOGLE_JSON_CLIENT_ID: z.string(),
-    GOOGLE_JSON_AUTH_URI: z.string(),
-    GOOGLE_JSON_TOKEN_URI: z.string(),
-    GOOGLE_JSON_AUTH_PROVIDER_CERT_URL: z.string(),
-    GOOGLE_JSON_CLIENT_CERT_URL: z.string(),
-    GOOGLE_JSON_UNIVERSE_DOMAIN: z.string(),
   },
 
   /**
@@ -69,19 +57,6 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-
-    GOOGLE_JSON_TYPE: process.env.GOOGLE_JSON_TYPE,
-    GOOGLE_JSON_PROJECT_ID: process.env.GOOGLE_JSON_PROJECT_ID,
-    GOOGLE_JSON_PRIVATE_KEY_ID: process.env.GOOGLE_JSON_PRIVATE_KEY_ID,
-    GOOGLE_JSON_PRIVATE_KEY: process.env.GOOGLE_JSON_PRIVATE_KEY,
-    GOOGLE_JSON_CLIENT_EMAIL: process.env.GOOGLE_JSON_CLIENT_EMAIL,
-    GOOGLE_JSON_CLIENT_ID: process.env.GOOGLE_JSON_CLIENT_ID,
-    GOOGLE_JSON_AUTH_URI: process.env.GOOGLE_JSON_AUTH_URI,
-    GOOGLE_JSON_TOKEN_URI: process.env.GOOGLE_JSON_TOKEN_URI,
-    GOOGLE_JSON_AUTH_PROVIDER_CERT_URL:
-      process.env.GOOGLE_JSON_AUTH_PROVIDER_CERT_URL,
-    GOOGLE_JSON_CLIENT_CERT_URL: process.env.GOOGLE_JSON_CLIENT_CERT_URL,
-    GOOGLE_JSON_UNIVERSE_DOMAIN: process.env.GOOGLE_JSON_UNIVERSE_DOMAIN,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
