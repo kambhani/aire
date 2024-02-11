@@ -431,15 +431,12 @@ export const resumeRouter = createTRPCRouter({
       Please respond with a cover letter formatted as plaintext. Please do not include a greeting or a closing. In other words, do not include the "dear ..." and do not include the "sincerely, ...".
       `;
 
-      // const resp = await openai.chat.completions.create({
-      //   messages: [{ role: "user", content: prompt }],
+      const resp = await openai.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
 
-      //   model: "gpt-3.5-turbo",
-      // });
-      // const chatGPTCoverLetterString = resp?.choices[0]?.message.content;
-
-      const chatGPTCoverLetterString = "tempalte cover lettetr, change before submitting"
-
+        model: "gpt-4",
+      });
+      const chatGPTCoverLetterString = resp?.choices[0]?.message.content;
 
       const response = {
         projects: [
