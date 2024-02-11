@@ -66,11 +66,12 @@ export default function UploadResume() {
   return (
     <>
       <title>Upload Resume | aire</title>
-      <div>
-        <p className="mx-auto mb-4 mt-8 w-full max-w-xl text-2xl font-bold">
-          Upload Resume
+      <div className="mx-auto mb-4 mt-8 w-full max-w-xl">
+        <p className="text-2xl font-bold">Upload Resume</p>
+        <p className="mt-2 text-sm text-slate-400">
+          Upload your resume to be processed below
         </p>
-        <div className="flex flex-col gap-4">
+        <div className="mt-4 flex flex-col gap-4">
           {encoding && selectedFile && (
             <div className="mx-auto hidden w-full max-w-xl md:block">
               <embed src={encoding} width="576px" height="500px" />

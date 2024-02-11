@@ -96,7 +96,7 @@ export default function Generate() {
         <div className="mx-auto mt-8 grid w-full">
           <div className="mx-auto">
             <h1 className="text-2xl font-bold">Job Description</h1>
-            <p className=" text-sm text-slate-400">
+            <p className=" mt-2 text-sm text-slate-400">
               Please copy and paste the job description for the posting you have
               found below
             </p>
