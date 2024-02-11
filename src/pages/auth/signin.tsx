@@ -4,6 +4,10 @@ import { type GetServerSideProps } from "next";
 import { signIn, getProviders } from "next-auth/react";
 import { FaDiscord } from "react-icons/fa";
 
+const mapper = {
+  Discord: <FaDiscord className="mr-2 text-xl" />,
+};
+
 export default function SignIn({
   providers,
 }: {
