@@ -68,14 +68,6 @@ export default function UploadResume() {
     //     console.error(error);
     //   });
   }
-  async function testAI() {
-    const openai = new OpenAI();
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: "system", content: "You are a helpful assistant." }],
-      model: "gpt-3.5-turbo",
-    });
-    console.log(completion.choices[0]);
-  }
 
   return (
     <div>
@@ -115,7 +107,6 @@ export default function UploadResume() {
           onChange={handleFileChange}
         />
       </div>
-      <Button onClick={testAI}>Boop</Button>
     </div>
   );
 }
