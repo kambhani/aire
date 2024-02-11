@@ -46,7 +46,7 @@ export default function Navbar() {
           {navLinks.map((navLink) => (
             <p
               key={navLink.title}
-              className={`font-semibold transition duration-100 ease-in hover:text-black dark:hover:text-white ${navLink.path == path ? "text-black" : "text-slate-500 dark:text-slate-400"}`}
+              className={`font-semibold transition duration-100 ease-in hover:text-black dark:hover:text-white ${navLink.path == path ? "text-black dark:text-white" : "text-slate-500 dark:text-slate-400"}`}
             >
               <Link href={navLink.path}>{navLink.title}</Link>
             </p>
