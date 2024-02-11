@@ -13,7 +13,7 @@ import {
   DialogFooter,
 } from "~/components/ui/dialog";
 import { Textarea } from "~/components/ui/textarea";
-import { Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -49,6 +49,7 @@ export default function Profile() {
   });
 
   const [newEducation, setNewEducation] = useState({
+    id: "",
     school: "",
     degree: "",
     timeframe: "",
@@ -59,6 +60,17 @@ export default function Profile() {
     onError: () => toast("Education could not be added"),
     onSettled: () =>
       setNewEducation({
+        id: "",
+        school: "",
+        degree: "",
+        timeframe: "",
+      }),
+  });
+  const updateEducationMutation = api.education.update.useMutation({
+    onSuccess: () => utils.education.invalidate(),
+    onSettled: () =>
+      setNewEducation({
+        id: "",
         school: "",
         degree: "",
         timeframe: "",
@@ -70,6 +82,7 @@ export default function Profile() {
   });
 
   const [newExperience, setNewExperience] = useState({
+    id: "",
     company: "",
     role: "",
     timeframe: "",
@@ -81,6 +94,7 @@ export default function Profile() {
     onSuccess: () => utils.experience.invalidate(),
     onSettled: () =>
       setNewExperience({
+        id: "",
         company: "",
         role: "",
         timeframe: "",
@@ -88,12 +102,26 @@ export default function Profile() {
         description: "",
       }),
   });
+  const updateExperienceMutation = api.experience.update.useMutation({
+    onSuccess: () => utils.experience.invalidate(),
+    onSettled: () => {
+      setNewExperience({
+        id: "",
+        company: "",
+        role: "",
+        timeframe: "",
+        location: "",
+        description: "",
+      });
+    },
+  });
   const deleteExperienceMutation = api.experience.delete.useMutation({
     onSuccess: () => utils.experience.invalidate(),
     onError: () => toast("Experience could not be deleted"),
   });
 
   const [newProject, setNewProject] = useState({
+    id: "",
     name: "",
     technologies: "",
     timeframe: "",
@@ -104,6 +132,18 @@ export default function Profile() {
     onSuccess: () => utils.project.invalidate(),
     onSettled: () =>
       setNewProject({
+        id: "",
+        name: "",
+        technologies: "",
+        timeframe: "",
+        description: "",
+      }),
+  });
+  const updateProjectMutation = api.project.update.useMutation({
+    onSuccess: () => utils.project.invalidate(),
+    onSettled: () =>
+      setNewProject({
+        id: "",
         name: "",
         technologies: "",
         timeframe: "",
@@ -256,18 +296,33 @@ export default function Profile() {
         </Button>
       </div>
       <div className="mx-auto mt-8 px-2 md:w-11/12">
-        <div className="flex justify-between">
-          <h2 className="text-2xl font-bold">Education</h2>
+        <Dialog>
+          <div className="flex justify-between">
+            <h2 className="text-2xl font-bold">Education</h2>
 
-          <Dialog>
             <DialogTrigger asChild>
-              <Button className="bg-black">+ Add Education</Button>
+              <Button
+                className="bg-black"
+                onClick={() =>
+                  setNewEducation({
+                    id: "",
+                    school: "",
+                    degree: "",
+                    timeframe: "",
+                  })
+                }
+              >
+                + Add Education
+              </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
-                <DialogTitle>New Education</DialogTitle>
+                <DialogTitle>
+                  {newEducation.id.length > 0 ? "Edit" : "Add"} Education
+                </DialogTitle>
                 <DialogDescription>
-                  Add the details of your education here
+                  {newEducation.id.length > 0 ? "Edit" : "Add"} the details of
+                  your education here
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
@@ -324,62 +379,92 @@ export default function Profile() {
                 <DialogClose asChild>
                   <Button
                     type="submit"
-                    onClick={() => createEducationMutation.mutate(newEducation)}
+                    onClick={() =>
+                      newExperience.id.length > 0
+                        ? updateEducationMutation.mutate(newEducation)
+                        : createEducationMutation.mutate(newEducation)
+                    }
                   >
-                    Add Education
+                    {newEducation.id.length > 0 ? "Edit" : "Add"} Education
                   </Button>
                 </DialogClose>
               </DialogFooter>
             </DialogContent>
-          </Dialog>
-        </div>
+          </div>
 
-        <div className="mt-4 flex flex-col gap-4">
-          {educations.data && (
-            <>
-              {educations.data.map((element) => (
-                <div
-                  key={element.id}
-                  className="flex w-full flex-row justify-between rounded-xl border-2 p-4"
-                >
-                  <div>
-                    <h3 className="text-xl font-semibold">{element.school}</h3>
-                    <h4 className="font-light">{element.degree}</h4>
-                    <h4 className="font-light">{element.timeframe}</h4>
-                  </div>
-                  <div className="my-auto flex h-full gap-4">
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      className="bg-transparent text-red-400"
-                    >
-                      <Trash2
-                        className="h-4 w-4"
+          <div className="mt-4 flex flex-col gap-4">
+            {educations.data && (
+              <>
+                {educations.data.map((element) => (
+                  <div
+                    key={element.id}
+                    className="flex w-full flex-row justify-between rounded-xl border-2 p-4"
+                  >
+                    <div>
+                      <h3 className="text-xl font-semibold">
+                        {element.school}
+                      </h3>
+                      <h4 className="font-light">{element.degree}</h4>
+                      <h4 className="font-light">{element.timeframe}</h4>
+                    </div>
+                    <div className="my-auto flex h-full gap-4">
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => setNewEducation(element)}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                      </DialogTrigger>
+                      <Button
+                        variant="destructive"
+                        size="icon"
                         onClick={() =>
                           deleteEducationMutation.mutate({ id: element.id })
                         }
-                      />
-                    </Button>
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
+                ))}
+              </>
+            )}
+          </div>
+        </Dialog>
       </div>
-      <div className="mx-auto mt-8 px-2 md:w-11/12">
-        <div className="flex justify-between">
-          <h2 className="text-2xl font-bold ">Experience</h2>
 
-          <Dialog>
+      <div className="mx-auto mt-8 px-2 md:w-11/12">
+        <Dialog>
+          <div className="flex justify-between">
+            <h2 className="text-2xl font-bold ">Experience</h2>
+
             <DialogTrigger asChild>
-              <Button className="bg-black">+ Add Experience</Button>
+              <Button
+                className="bg-black"
+                onClick={() =>
+                  setNewExperience({
+                    id: "",
+                    company: "",
+                    role: "",
+                    timeframe: "",
+                    location: "",
+                    description: "",
+                  })
+                }
+              >
+                + Add Experience
+              </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
-                <DialogTitle>New Experience</DialogTitle>
+                <DialogTitle>
+                  {newExperience.id.length > 0 ? "Edit" : "Add"} Experience
+                </DialogTitle>
                 <DialogDescription>
-                  Add the details of your experience here
+                  {newExperience.id.length > 0 ? "Edit" : "Add"} the details of
+                  your experience here
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
@@ -464,66 +549,92 @@ export default function Profile() {
                   <Button
                     type="submit"
                     onClick={() =>
-                      createExperienceMutation.mutate(newExperience)
+                      newExperience.id.length > 0
+                        ? updateExperienceMutation.mutate(newExperience)
+                        : createExperienceMutation.mutate(newExperience)
                     }
                   >
-                    Add Experience
+                    {newExperience.id.length > 0 ? "Edit" : "Add"} Experience
                   </Button>
                 </DialogClose>
               </DialogFooter>
             </DialogContent>
-          </Dialog>
-        </div>
+          </div>
 
-        <div className="mt-4 flex flex-col gap-4">
-          {experiences.data && (
-            <>
-              {experiences.data.map((element) => (
-                <div
-                  key={element.id}
-                  className="flex w-full flex-row justify-between rounded-xl border-2 p-4"
-                >
-                  <div>
-                    <h3 className="text-xl font-semibold">{element.company}</h3>
-                    <h4 className="font-light">{element.role}</h4>
-                    <h4 className="font-light">{element.timeframe}</h4>
+          <div className="mt-4 flex flex-col gap-4">
+            {experiences.data && (
+              <>
+                {experiences.data.map((element) => (
+                  <div
+                    key={element.id}
+                    className="flex w-full flex-row justify-between rounded-xl border-2 p-4"
+                  >
+                    <div>
+                      <h3 className="text-xl font-semibold">
+                        {element.company}
+                      </h3>
+                      <h4 className="font-light">{element.role}</h4>
+                      <h4 className="font-light">{element.timeframe}</h4>
 
-                    <h4 className="font-light">{element.location}</h4>
-                    <p>{element.description}</p>
-                  </div>
-                  <div className="my-auto flex h-full gap-4">
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      className="bg-transparent text-red-400"
-                    >
-                      <Trash2
-                        className="h-4 w-4"
+                      <h4 className="font-light">{element.location}</h4>
+                      <p>{element.description}</p>
+                    </div>
+                    <div className="my-auto flex h-full gap-4">
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => setNewExperience(element)}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                      </DialogTrigger>
+                      <Button
+                        variant="destructive"
+                        size="icon"
                         onClick={() =>
                           deleteExperienceMutation.mutate({ id: element.id })
                         }
-                      />
-                    </Button>
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
+                ))}
+              </>
+            )}
+          </div>
+        </Dialog>
       </div>
       <div className="mx-auto mt-8 px-2 md:w-11/12">
-        <div className="flex justify-between">
-          <h2 className="text-2xl font-bold ">Projects</h2>
+        <Dialog>
+          <div className="flex justify-between">
+            <h2 className="text-2xl font-bold ">Projects</h2>
 
-          <Dialog>
             <DialogTrigger asChild>
-              <Button className="bg-black text-white">+ Add Project</Button>
+              <Button
+                className="bg-black text-white"
+                onClick={() =>
+                  setNewProject({
+                    id: "",
+                    name: "",
+                    technologies: "",
+                    timeframe: "",
+                    description: "",
+                  })
+                }
+              >
+                + Add Project
+              </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
-                <DialogTitle>New Project</DialogTitle>
+                <DialogTitle>
+                  {newProject.id.length > 0 ? "Edit Project" : "Add Project"}
+                </DialogTitle>
                 <DialogDescription>
-                  Add the details of your project here
+                  {newProject.id.length > 0 ? "Edit" : "Add"} the details of
+                  your project here
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
@@ -591,58 +702,69 @@ export default function Profile() {
                 <DialogClose asChild>
                   <Button
                     type="submit"
-                    onClick={() => createProjectMutation.mutate(newProject)}
+                    onClick={() =>
+                      newProject.id.length > 0
+                        ? updateProjectMutation.mutate(newProject)
+                        : createProjectMutation.mutate(newProject)
+                    }
                   >
-                    Add Project
+                    {newProject.id.length > 0 ? "Edit" : "Add"} Project
                   </Button>
                 </DialogClose>
               </DialogFooter>
             </DialogContent>
-          </Dialog>
-        </div>
+          </div>
 
-        <div className="mt-4 flex flex-col gap-4">
-          {projects.data && (
-            <>
-              {projects.data.map((element) => (
-                <div
-                  key={element.id}
-                  className="flex w-full flex-row justify-between rounded-xl border-2 p-4 dark:bg-blue-800"
-                >
-                  <div>
-                    <h3 className="text-xl font-semibold">{element.name}</h3>
-                    <h4 className="font-light">
-                      <span className="font-bold">Technologies: </span>
-                      {element.technologies}
-                    </h4>
-                    <h4 className="font-light">
-                      <span className="font-bold">Timeframe: </span>
-                      {element.timeframe}
-                    </h4>
-                    <p className="font-light">
-                      <span className="font-bold">Description: </span>
-                      {element.description}
-                    </p>
-                  </div>
-                  <div className="my-auto flex h-full gap-4">
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      className="bg-transparent text-red-400"
-                    >
-                      <Trash2
-                        className="h-4 w-4"
+          <div className="mt-4 flex flex-col gap-4">
+            {projects.data && (
+              <>
+                {projects.data.map((element) => (
+                  <div
+                    key={element.id}
+                    className="flex w-full flex-row justify-between rounded-xl border-2 p-4 dark:bg-blue-800"
+                  >
+                    <div>
+                      <h3 className="text-xl font-semibold">{element.name}</h3>
+                      <h4 className="font-light">
+                        <span className="font-bold">Technologies: </span>
+                        {element.technologies}
+                      </h4>
+                      <h4 className="font-light">
+                        <span className="font-bold">Timeframe: </span>
+                        {element.timeframe}
+                      </h4>
+                      <p className="font-light">
+                        <span className="font-bold">Description: </span>
+                        {element.description}
+                      </p>
+                    </div>
+                    <div className="my-auto flex h-full gap-4">
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => setNewProject(element)}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                      </DialogTrigger>
+
+                      <Button
+                        variant="destructive"
+                        size="icon"
                         onClick={() =>
                           deleteProjectMutation.mutate({ id: element.id })
                         }
-                      />
-                    </Button>
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
+                ))}
+              </>
+            )}
+          </div>
+        </Dialog>
       </div>
     </>
   );

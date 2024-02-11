@@ -33,6 +33,43 @@ export const projectRouter = createTRPCRouter({
     });
   }),
 
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        name: z.string().min(1),
+        technologies: z.string().min(1),
+        timeframe: z.string().min(1),
+        description: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const project = await ctx.db.project.findFirstOrThrow({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (project.userId != ctx.session.user.id) {
+        throw new TRPCError({
+          message: "Cannot update another user's project!",
+          code: "FORBIDDEN",
+        });
+      }
+
+      return ctx.db.project.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          technologies: input.technologies,
+          timeframe: input.timeframe,
+          description: input.description,
+        },
+      });
+    }),
+
   delete: protectedProcedure
     .input(
       z.object({

@@ -31,6 +31,41 @@ export const educationRouter = createTRPCRouter({
     });
   }),
 
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        school: z.string().min(1),
+        degree: z.string().min(1),
+        timeframe: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const education = await ctx.db.education.findFirstOrThrow({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (education.userId != ctx.session.user.id) {
+        throw new TRPCError({
+          message: "Cannot delete another user's education!",
+          code: "FORBIDDEN",
+        });
+      }
+
+      return ctx.db.education.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          school: input.school,
+          degree: input.degree,
+          timeframe: input.timeframe,
+        },
+      });
+    }),
+
   delete: protectedProcedure
     .input(
       z.object({
