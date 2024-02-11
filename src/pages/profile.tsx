@@ -498,9 +498,7 @@ export default function Profile() {
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="" className="bg-black text-white">
-                + Add Project
-              </Button>
+              <Button className="bg-black text-white">+ Add Project</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
