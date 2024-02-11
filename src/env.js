@@ -31,7 +31,7 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
     OPENAI_API_KEY: z.string(),
-    
+
     GOOGLE_JSON_TYPE: z.string(),
     GOOGLE_JSON_PROJECT_ID: z.string(),
     GOOGLE_JSON_PRIVATE_KEY_ID: z.string(),
@@ -62,11 +62,14 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    NEXTAUTH_URL:
+      process.env.NODE_ENV === "production"
+        ? process.env.NEXTAUTH_URL_PROD
+        : process.env.NEXTAUTH_URL,
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-    
+
     GOOGLE_JSON_TYPE: process.env.GOOGLE_JSON_TYPE,
     GOOGLE_JSON_PROJECT_ID: process.env.GOOGLE_JSON_PROJECT_ID,
     GOOGLE_JSON_PRIVATE_KEY_ID: process.env.GOOGLE_JSON_PRIVATE_KEY_ID,
@@ -75,7 +78,8 @@ export const env = createEnv({
     GOOGLE_JSON_CLIENT_ID: process.env.GOOGLE_JSON_CLIENT_ID,
     GOOGLE_JSON_AUTH_URI: process.env.GOOGLE_JSON_AUTH_URI,
     GOOGLE_JSON_TOKEN_URI: process.env.GOOGLE_JSON_TOKEN_URI,
-    GOOGLE_JSON_AUTH_PROVIDER_CERT_URL: process.env.GOOGLE_JSON_AUTH_PROVIDER_CERT_URL,
+    GOOGLE_JSON_AUTH_PROVIDER_CERT_URL:
+      process.env.GOOGLE_JSON_AUTH_PROVIDER_CERT_URL,
     GOOGLE_JSON_CLIENT_CERT_URL: process.env.GOOGLE_JSON_CLIENT_CERT_URL,
     GOOGLE_JSON_UNIVERSE_DOMAIN: process.env.GOOGLE_JSON_UNIVERSE_DOMAIN,
   },
