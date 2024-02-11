@@ -2,10 +2,29 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { OpenAI } from "openai";
 import { env } from "~/env";
+import vision from "@google-cloud/vision"
+import {Storage} from "@google-cloud/storage"
+import { google } from "@google-cloud/vision/build/protos/protos";
+import fs from "fs"
+
 
 const openai = new OpenAI({
   apiKey: env.OPENAI_API_KEY,
 });
+
+const googleAuthCredentials={
+  projectId: process.env.GOOGLE_JSON_PROJECT_ID,
+  credentials: {
+    type: process.env.GOOGLE_JSON_TYPE,
+    project_id: process.env.GOOGLE_JSON_PROJECT_ID,
+    private_key_id: process.env.GOOGLE_JSON_PRIVATE_KEY_ID,
+    private_key:process.env.GOOGLE_JSON_PRIVATE_KEY,
+    client_email: process.env.GOOGLE_JSON_CLIENT_EMAIL,
+    client_id: process.env.GOOGLE_JSON_CLIENT_ID,
+  }
+}
+const cloudStorage = new Storage(googleAuthCredentials);
+const visionClient = new vision.ImageAnnotatorClient(googleAuthCredentials);
 
 const resumeTemplate = (output: {
   metadata: {
@@ -213,10 +232,10 @@ const resumeTemplate = (output: {
               return String.raw`\resumeItem{${bullet}}`;
             })
             .join("")}
-            \resumeItemListEnd
         `;
         })
         .join("")}
+        \resumeItemListEnd
     \resumeSubHeadingListEnd
 
 
@@ -486,10 +505,23 @@ export const resumeRouter = createTRPCRouter({
     }),
 
   parseResume: protectedProcedure
-    .input(z.object({ resume: z.string().min(1) }))
+    .input(z.object({ resume: z.string().min(1), name: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      // u have input.resume now
-      console.log(input.resume);
-      return 2;
+        if (!input.resume) return;
+        const encoding : string | undefined = input.resume.split("base64")[1];
+        if (!encoding) return;
+        const buffer = Buffer.from(encoding, "base64");
+        fs.writeFileSync(`./${input.name}.pdf`, buffer);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,
+         
+        // const [result] = visionClient.batchAnnotateFiles("./input.pdf");
+        // const labels = result.textAnnotations;
+        // labels.forEach(label => console.log(label.description));
+        // res.status(200).json(labels[0].description);
+              
+        // const [result] = visionClient.batchAnnotateFiles(request);
+        // // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        // console.log(result.responses[0].responses[0].fullTextAnnotation.text)
+        // res.json({status: 200, body: result.responses[0].responses[0].fullTextAnnotation.text})
     }),
 });
