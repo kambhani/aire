@@ -5,10 +5,11 @@ import axios from "axios";
 import OpenAI from "openai";
 import { env } from "~/env";
 import { api } from "~/utils/api";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function UploadResume() {
   const utils = api.useUtils();
+  const router = useRouter();
   const [selectedFile, setSelectedFile] = useState<File | null | undefined>(
     null,
   );
@@ -50,10 +51,15 @@ export default function UploadResume() {
     if (!selectedFile) return;
     formData.append("file", selectedFile);
     const file_base64 = (await getBase64(selectedFile)) as string;
-    parseResumeMutation.mutate({
-      resume: file_base64,
-      name: selectedFile.name,
-    });
+    parseResumeMutation.mutate(
+      {
+        resume: file_base64,
+        name: selectedFile.name,
+      },
+      {
+        onSuccess: () => void router.push("/profile"),
+      },
+    );
   }
 
   return (
