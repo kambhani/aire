@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { OpenAI } from "openai";
 import { env } from "~/env";
+var lescape = require('escape-latex');
 
 const openai = new OpenAI({
   apiKey: env.OPENAI_API_KEY,
@@ -26,14 +27,14 @@ const resumeTemplate = (output: {
     name: string;
     technologies: string;
     timeframe: string;
-    description: string[];
+    description: string;
   }[];
   experience: {
     company: string;
     role: string;
     location: string;
     timeframe: string;
-    description: string[];
+    description: string;
   }[];
 }) => {
   return String.raw`
@@ -185,7 +186,7 @@ const resumeTemplate = (output: {
         {${experience.role}}{${experience.timeframe}}
         {${experience.company}}{${experience.location}}
         \resumeItemListStart
-        ${experience.description
+        ${experience.description.split("\n")
           .map((bullet) => {
             return String.raw`
             \resumeItem{${bullet}}
@@ -207,7 +208,7 @@ const resumeTemplate = (output: {
           return String.raw`
         \resumeProjectHeading
           {\textbf{${project.name}} $|$ \emph{${project.technologies}}}{${project.timeframe}}
-          ${project.description
+          ${project.description.split("\n")
             .map((bullet) => {
               return String.raw`\resumeItem{${bullet}}`;
             })
@@ -407,59 +408,110 @@ export const resumeRouter = createTRPCRouter({
       Please respond with a cover letter formatted as plaintext. Please do not include a greeting or a closing. In other words, do not include the "dear ..." and do not include the "sincerely, ...".
       `;
 
-      const resp = await openai.chat.completions.create({
-        messages: [{ role: "user", content: prompt }],
+      // const resp = await openai.chat.completions.create({
+      //   messages: [{ role: "user", content: prompt }],
 
-        model: "gpt-3.5-turbo",
-      });
-      const chatGPTCoverLetterString = resp?.choices[0]?.message.content;
+      //   model: "gpt-3.5-turbo",
+      // });
+      // const chatGPTCoverLetterString = resp?.choices[0]?.message.content;
+
+      const chatGPTCoverLetterString = "tempalte cover lettetr, change before submitting"
+
 
       const response = {
         projects: [
           {
-            name: "Project 1 Name",
-            technologies: "Project 1 tech",
-            timeframe: "Project 1 timeline",
-            description: ["Project 1 description"],
+            name: "PlACEHOLDER Project 1 Name",
+            technologies: "PlACEHOLDER Project 1 tech",
+            timeframe: "PlACEHOLDER Project 1 timeline",
+            description: "PlACEHOLDER Project 1 description",
           },
           {
-            name: "Project 2 Name",
-            technologies: "Project 2 tech",
-            timeframe: "Project 2 timeline",
-            description: ["Project 2 description"],
+            name: "PlACEHOLDER Project 2 Name",
+            technologies: "PlACEHOLDER Project 2 tech",
+            timeframe: "PlACEHOLDER Project 2 timeline",
+            description: "PlACEHOLDER Project 2 description",
+          },
+          {
+            name: "PlACEHOLDER Project 2 Name",
+            technologies: "PlACEHOLDER Project 2 tech",
+            timeframe: "PlACEHOLDER Project 2 timeline",
+            description: "PlACEHOLDER Project 2 description",
           },
         ],
         experience: [
           {
-            company: "Experience 1 Name",
-            role: "Experience 1 Role",
-            location: "Experience 1 Location",
-            timeframe: "Experience 1 Timeframe",
-            description: ["Experience 1 Description"],
+            company: "PlACEHOLDER Experience 1 Name",
+            role: "PlACEHOLDER Experience 1 Role",
+            location: "PlACEHOLDER Experience 1 Location",
+            timeframe: "PlACEHOLDER Experience 1 Timeframe",
+            description: "PlACEHOLDER Experience 1 Description",
           },
           {
-            company: "Experience 2 Name",
-            role: "Experience 2 Role",
-            location: "Experience 2 Location",
-            timeframe: "Experience 2 Timeframe",
-            description: ["Experience 2 Description"],
+            company: "PlACEHOLDER Experience 2 Name",
+            role: "PlACEHOLDER Experience 2 Role",
+            location: "PlACEHOLDER Experience 2 Location",
+            timeframe: "PlACEHOLDER Experience 2 Timeframe",
+            description: "PlACEHOLDER Experience 2 Description",
           },
           {
-            company: "Experience 3 Name",
-            role: "Experience 3 Role",
-            location: "Experience 3 Location",
-            timeframe: "Experience 3 Timeframe",
-            description: ["Experience 3 Description", "Exp 3 desc 2"],
+            company: "PlACEHOLDER Experience 3 Name",
+            role: "PlACEHOLDER Experience 3 Role",
+            location: "PlACEHOLDER Experience 3 Location",
+            timeframe: "PlACEHOLDER Experience 3 Timeframe",
+            description: "PlACEHOLDER Experience 3 Description",
           },
         ],
       };
 
+      // we need to make a thing
+      const resumePrompt = `
+        I am going to provide you my previous work experiences, my previous programming projects, and a job description. I want you to take my previous work experiences, my previous programming projects, and a job description and tell me which three previous work experiences to include and which three past programming projects to include on my resume that best fit the job description. The user object contains my previous work experience and my previous programming projects. Please place emphasis on choosing specific experiences and projects that best fit the job description. 
+
+        You need to output the resume in the format below. Please replace each value in the JSON object with information from the user object. Each project and experience do not necessarily need to be related to each other. 
+
+        ${JSON.stringify(response)}
+
+        ---
+
+        The user object is below:
+
+        ${JSON.stringify(user)}
+
+        ---
+
+        The job description is below:
+
+        ${input.description}
+        
+        ---
+
+        Your entire answer MUST be in valid JSON format with the same keys as the provided resume format. Do not add any commentary/text before or after your JSON answer.
+      `
+
+
+      const resumeResp = await openai.chat.completions.create({
+        messages: [
+          { role: "system", content: "You are a professional resume maker." },
+          { role: "user", content: resumePrompt }
+        ],
+
+        model: "gpt-4",
+      });
+      const chatGPTResume = resumeResp?.choices[0];
+
+      console.log(chatGPTResume)
+
+      const strResume = chatGPTResume.message.content.replace("&", "\\\\&").replace("•", "").replace("%", "\\\\%");
+
+      // const strResume = chatGPTResume.message.content;
+
+      const jsonResume = JSON.parse(strResume);
+
       const resumeInput = {
-        ...response,
+        ...jsonResume,
         metadata: user.metadata,
         education: user.educations,
-        projects: response.projects,
-        experience: response.experience,
         body:
           chatGPTCoverLetterString ??
           "Cover letter description could not be generated",

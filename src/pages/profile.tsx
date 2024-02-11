@@ -489,7 +489,7 @@ export default function Profile() {
                     <h4 className="font-light">{element.timeframe}</h4>
 
                     <h4 className="font-light">{element.location}</h4>
-                    <p>{element.description}</p>
+                    <p className="whitespace-pre-line	">{element.description}</p>
                   </div>
                   <div className="my-auto flex h-full gap-4">
                     <Button
