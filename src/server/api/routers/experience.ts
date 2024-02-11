@@ -35,6 +35,45 @@ export const experienceRouter = createTRPCRouter({
     });
   }),
 
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        company: z.string().min(1),
+        role: z.string().min(1),
+        timeframe: z.string().min(1),
+        location: z.string().min(1),
+        description: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const experience = await ctx.db.experience.findFirstOrThrow({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (experience.userId != ctx.session.user.id) {
+        throw new TRPCError({
+          message: "Cannot update another user's experience!",
+          code: "FORBIDDEN",
+        });
+      }
+
+      return ctx.db.experience.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          company: input.company,
+          role: input.role,
+          timeframe: input.timeframe,
+          location: input.location,
+          description: input.description,
+        },
+      });
+    }),
+
   delete: protectedProcedure
     .input(
       z.object({

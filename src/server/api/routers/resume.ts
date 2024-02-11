@@ -2,15 +2,13 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { OpenAI } from "openai";
 import { env } from "~/env";
-<<<<<<< HEAD
 var lescape = require('escape-latex');
-=======
 import vision from "@google-cloud/vision"
 import {Storage} from "@google-cloud/storage"
 import { google } from "@google-cloud/vision/build/protos/protos";
 import fs from "fs"
 
->>>>>>> c5a494f42a4550ad54f0f383ca18cb152fbe5abb
+
 
 const openai = new OpenAI({
   apiKey: env.OPENAI_API_KEY,
@@ -434,9 +432,12 @@ export const resumeRouter = createTRPCRouter({
       const resp = await openai.chat.completions.create({
         messages: [{ role: "user", content: prompt }],
 
-        model: "gpt-4",
+        model: "gpt-3.5-turbo",
       });
       const chatGPTCoverLetterString = resp?.choices[0]?.message.content;
+
+      // const chatGPTCoverLetterString = "tempalte cover lettetr, change before submitting"
+
 
       const response = {
         projects: [
@@ -522,9 +523,7 @@ export const resumeRouter = createTRPCRouter({
 
       console.log(chatGPTResume)
 
-      const strResume = chatGPTResume.message.content.replace("&", "\\\\&").replace("•", "").replace("%", "\\\\%");
-
-      // const strResume = chatGPTResume.message.content;
+      const strResume = chatGPTResume.message.content.replaceAll("&", "\\\\&").replaceAll("•", "").replaceAll("%", "\\\\%");
 
       const jsonResume = JSON.parse(strResume);
 
@@ -537,15 +536,63 @@ export const resumeRouter = createTRPCRouter({
           "Cover letter description could not be generated",
       };
 
+      // NOW WE NEED TO CALCULATE SCORE
+      const scoreResponse = {
+        score: "50",
+        improvements: [
+          'PLACEHOLDER FOR IMPROVEMENT 1',
+          'PLACEHOLDER FOR IMPROVEMENT 2',
+          'PLACEHOLDER FOR IMPROVEMENT 3',
+          'PLACEHOLDER FOR IMPROVEMENT 4',
+          'PLACEHOLDER FOR IMPROVEMENT 5',
+          'PLACEHOLDER FOR IMPROVEMENT 6',
+
+        ]
+      }
+
+      const scorePrompt = `
+        I am going to provde to you my previous work experiences, my previous programming projects, and a job description. I want you to take my previous work experiences, my previous programming projects, and a job description and tell me a score out of 100 of how well my work experiences and programming projects match the job description, and list of suggestions on how I can improve my work experiences and programming projects to better match the job description.
+
+        
+        You need to output the score and suggestions for improvement in the format below. Please replace each value in the JSON object with your answers.
+      
+        ${JSON.stringify(scoreResponse)}
+
+        ---
+
+        The user object is below:
+
+        ${JSON.stringify(user)}
+
+        ---
+
+        The job description is below:
+
+        ${input.description}
+        
+        ---
+
+        Your entire answer MUST be in valid JSON format with the same keys as the provided resume format. Do not add any commentary/text before or after your JSON answer.
+    `
+
+      const scoreResp = await openai.chat.completions.create({
+        messages: [
+          { role: "system", content: "You are a professional resume maker." },
+          { role: "user", content: scorePrompt }
+        ],
+
+        model: "gpt-3.5-turbo",
+      });
+      const scoreText = scoreResp?.choices[0].message.content;
+
+      const scoreJSON = JSON.parse(scoreText);
+
+
       // console.log(resumeTemplate(resumeInput));
 
       const ret = {
-        match: Math.floor(Math.random() * 50 + 50),
-        suggestions: [
-          "Expand on your projects section to showcase your skills to employers",
-          "You do not need so many things in the awards section because it distracts from the overall point in your resume",
-          "High school experiences are not always needed on a resume once you are in college, consider removing them",
-        ],
+        match: scoreJSON.score,
+        suggestions: scoreJSON.improvements,
         urls: [
           `data:application/x-tex;base64,${btoa(unescape(encodeURIComponent(resumeTemplate(resumeInput))))}`,
           `data:application/x-tex;base64,${btoa(unescape(encodeURIComponent(coverLetterTemplate(resumeInput))))}`,
