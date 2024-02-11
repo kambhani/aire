@@ -4,7 +4,7 @@ import { type GetServerSideProps } from "next";
 import { signIn, getProviders } from "next-auth/react";
 import { FaDiscord } from "react-icons/fa";
 
-const mapper = {
+const mapper: { [key: string]: any } = {
   Discord: <FaDiscord className="mr-2 text-xl" />,
 };
 
