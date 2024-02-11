@@ -22,6 +22,19 @@ const resumeTemplate = (output: {
     degree: string;
     timeframe: string;
   }[];
+  projects: {
+    name: string;
+    technologies: string;
+    timeframe: string;
+    description: string[];
+  }[];
+  experience: {
+    company: string;
+    role: string;
+    location: string;
+    timeframe: string;
+    description: string[];
+  }[];
 }) => {
   return String.raw`
 %-------------------------
@@ -149,13 +162,15 @@ const resumeTemplate = (output: {
 %-----------EDUCATION-----------
 \section{Education}
   \resumeSubHeadingListStart
-    ${output.education.map((education) => {
-      return String.raw`
+    ${output.education
+      .map((education) => {
+        return String.raw`
       \resumeSubheading
         {${education.school}}{}
         {${education.degree}}{${education.timeframe}}
       `;
-    })}
+      })
+      .join("")}
   \resumeSubHeadingListEnd
 
 
@@ -163,45 +178,23 @@ const resumeTemplate = (output: {
 \section{Experience}
   \resumeSubHeadingListStart
 
-    \resumeSubheading
-      {Undergraduate Research Assistant}{June 2020 -- Present}
-      {Texas A\&M University}{College Station, TX}
-      \resumeItemListStart
-        \resumeItem{Developed a REST API using FastAPI and PostgreSQL to store data from learning management systems}
-        \resumeItem{Developed a full-stack web application using Flask, React, PostgreSQL and Docker to analyze GitHub data}
-        \resumeItem{Explored ways to visualize GitHub collaboration in a classroom setting}
-      \resumeItemListEnd
-      
-% -----------Multiple Positions Heading-----------
-%    \resumeSubSubheading
-%     {Software Engineer I}{Oct 2014 - Sep 2016}
-%     \resumeItemListStart
-%        \resumeItem{Apache Beam}
-%          {Apache Beam is a unified model for defining both batch and streaming data-parallel processing pipelines}
-%     \resumeItemListEnd
-%    \resumeSubHeadingListEnd
-%-------------------------------------------
-
-    \resumeSubheading
-      {Information Technology Support Specialist}{Sep. 2018 -- Present}
-      {Southwestern University}{Georgetown, TX}
-      \resumeItemListStart
-        \resumeItem{Communicate with managers to set up campus computers used on campus}
-        \resumeItem{Assess and troubleshoot computer problems brought by students, faculty and staff}
-        \resumeItem{Maintain upkeep of computers, classroom equipment, and 200 printers across campus}
-    \resumeItemListEnd
-
-    \resumeSubheading
-      {Artificial Intelligence Research Assistant}{May 2019 -- July 2019}
-      {Southwestern University}{Georgetown, TX}
-      \resumeItemListStart
-        \resumeItem{Explored methods to generate video game dungeons based off of \emph{The Legend of Zelda}}
-        \resumeItem{Developed a game in Java to test the generated dungeons}
-        \resumeItem{Contributed 50K+ lines of code to an established codebase via Git}
-        \resumeItem{Conducted  a human subject study to determine which video game dungeon generation technique is enjoyable}
-        \resumeItem{Wrote an 8-page paper and gave multiple presentations on-campus}
-        \resumeItem{Presented virtually to the World Conference on Computational Intelligence}
-      \resumeItemListEnd
+    ${output.experience
+      .map((experience) => {
+        return String.raw`
+      \resumeSubheading
+        {${experience.role}}{${experience.timeframe}}
+        {${experience.company}}{${experience.location}}
+        \resumeItemListStart
+        ${experience.description
+          .map((bullet) => {
+            return String.raw`
+            \resumeItem{${bullet}}
+          `;
+          })
+          .join("")}
+      \resumeItemListEnd`;
+      })
+      .join("")}
 
   \resumeSubHeadingListEnd
 
@@ -209,22 +202,19 @@ const resumeTemplate = (output: {
 %-----------PROJECTS-----------
 \section{Projects}
     \resumeSubHeadingListStart
-      \resumeProjectHeading
-          {\textbf{Gitlytics} $|$ \emph{Python, Flask, React, PostgreSQL, Docker}}{June 2020 -- Present}
-          \resumeItemListStart
-            \resumeItem{Developed a full-stack web application using with Flask serving a REST API with React as the frontend}
-            \resumeItem{Implemented GitHub OAuth to get data from user’s repositories}
-            \resumeItem{Visualized GitHub data to show collaboration}
-            \resumeItem{Used Celery and Redis for asynchronous tasks}
-          \resumeItemListEnd
-      \resumeProjectHeading
-          {\textbf{Simple Paintball} $|$ \emph{Spigot API, Java, Maven, TravisCI, Git}}{May 2018 -- May 2020}
-          \resumeItemListStart
-            \resumeItem{Developed a Minecraft server plugin to entertain kids during free time for a previous job}
-            \resumeItem{Published plugin to websites gaining 2K+ downloads and an average 4.5/5-star review}
-            \resumeItem{Implemented continuous delivery using TravisCI to build the plugin upon new a release}
-            \resumeItem{Collaborated with Minecraft server administrators to suggest features and get feedback about the plugin}
-          \resumeItemListEnd
+      ${output.projects
+        .map((project) => {
+          return String.raw`
+        \resumeProjectHeading
+          {\textbf{${project.name}} $|$ \emph{${project.technologies}}}{${project.timeframe}}
+          ${project.description
+            .map((bullet) => {
+              return String.raw`\resumeItem{${bullet}}`;
+            })
+            .join("")}
+        `;
+        })
+        .join("")}
     \resumeSubHeadingListEnd
 
 
@@ -429,13 +419,13 @@ export const resumeRouter = createTRPCRouter({
           {
             name: "Project 1 Name",
             technologies: "Project 1 tech",
-            timeline: "Project 1 timeline",
+            timeframe: "Project 1 timeline",
             description: ["Project 1 description"],
           },
           {
             name: "Project 2 Name",
             technologies: "Project 2 tech",
-            timeline: "Project 2 timeline",
+            timeframe: "Project 2 timeline",
             description: ["Project 2 description"],
           },
         ],
@@ -468,6 +458,8 @@ export const resumeRouter = createTRPCRouter({
         ...response,
         metadata: user.metadata,
         education: user.educations,
+        projects: response.projects,
+        experience: response.experience,
         body:
           chatGPTCoverLetterString ??
           "Cover letter description could not be generated",

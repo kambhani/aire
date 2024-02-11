@@ -1,15 +1,12 @@
 import { Textarea } from "~/components/ui/textarea";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { api } from "~/utils/api";
 import { toast } from "sonner";
 
 export default function Generate() {
-  const { data: sessionData } = useSession();
   const [description, setDescription] = useState("");
-  const [url, setUrl] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userText, setUserText] = useState("");

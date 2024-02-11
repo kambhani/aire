@@ -57,6 +57,12 @@ export default function Profile() {
   const createEducationMutation = api.education.create.useMutation({
     onSuccess: () => utils.education.invalidate(),
     onError: () => toast("Education could not be added"),
+    onSettled: () =>
+      setNewEducation({
+        school: "",
+        degree: "",
+        timeframe: "",
+      }),
   });
   const deleteEducationMutation = api.education.delete.useMutation({
     onSuccess: () => utils.education.invalidate(),
@@ -73,6 +79,14 @@ export default function Profile() {
   const experiences = api.experience.getUserExperience.useQuery();
   const createExperienceMutation = api.experience.create.useMutation({
     onSuccess: () => utils.experience.invalidate(),
+    onSettled: () =>
+      setNewExperience({
+        company: "",
+        role: "",
+        timeframe: "",
+        location: "",
+        description: "",
+      }),
   });
   const deleteExperienceMutation = api.experience.delete.useMutation({
     onSuccess: () => utils.experience.invalidate(),
@@ -88,6 +102,13 @@ export default function Profile() {
   const projects = api.project.getUserProjects.useQuery();
   const createProjectMutation = api.project.create.useMutation({
     onSuccess: () => utils.project.invalidate(),
+    onSettled: () =>
+      setNewProject({
+        name: "",
+        technologies: "",
+        timeframe: "",
+        description: "",
+      }),
   });
   const deleteProjectMutation = api.project.delete.useMutation({
     onSuccess: () => utils.project.invalidate(),
@@ -305,7 +326,7 @@ export default function Profile() {
                     type="submit"
                     onClick={() => createEducationMutation.mutate(newEducation)}
                   >
-                    Save changes
+                    Add Education
                   </Button>
                 </DialogClose>
               </DialogFooter>
@@ -446,7 +467,7 @@ export default function Profile() {
                       createExperienceMutation.mutate(newExperience)
                     }
                   >
-                    Save changes
+                    Add Experience
                   </Button>
                 </DialogClose>
               </DialogFooter>
@@ -572,7 +593,7 @@ export default function Profile() {
                     type="submit"
                     onClick={() => createProjectMutation.mutate(newProject)}
                   >
-                    Save changes
+                    Add Project
                   </Button>
                 </DialogClose>
               </DialogFooter>
