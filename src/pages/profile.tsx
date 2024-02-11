@@ -1,6 +1,5 @@
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
-import { useSession } from "next-auth/react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
 import {
@@ -14,12 +13,11 @@ import {
   DialogFooter,
 } from "~/components/ui/dialog";
 import { Textarea } from "~/components/ui/textarea";
-import { Pencil, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Profile() {
-  const { data: sessionData } = useSession();
   const utils = api.useUtils();
 
   const [newMetadata, setNewMetadata] = useState({
