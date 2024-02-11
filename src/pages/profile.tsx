@@ -721,7 +721,7 @@ export default function Profile() {
                 {projects.data.map((element) => (
                   <div
                     key={element.id}
-                    className="flex w-full flex-row justify-between rounded-xl border-2 p-4 dark:bg-blue-800"
+                    className="flex w-full flex-row justify-between rounded-xl border-2 p-4"
                   >
                     <div>
                       <h3 className="text-xl font-semibold">{element.name}</h3>

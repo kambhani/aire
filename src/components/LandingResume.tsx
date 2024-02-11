@@ -55,7 +55,7 @@ export default function LandingResume() {
       title: "Education",
       entries: [
         {
-          title: "Monster's University",
+          title: "Georiga Institute of Technology",
           bulletPoints: ["Bachelor of Science in Computer Science (4.00 GPA)"],
           startDate: "August 2022",
           endDate: "May 2026",
@@ -66,14 +66,20 @@ export default function LandingResume() {
       title: "Experience",
       entries: [
         {
-          title: "Test Experience 1",
-          bulletPoints: ["Bullet 1", "Bullet 2", "Bullet 3"],
+          title: "Research Assistant",
+          bulletPoints: [
+            "Created numpy models",
+            "Contributed to open-source software",
+          ],
           startDate: "June 2023",
           endDate: "August 2023",
         },
         {
-          title: "Test Experience 2",
-          bulletPoints: ["Bullet 1", "Bullet 2", "Bullet 3"],
+          title: "Tennis Coach",
+          bulletPoints: [
+            "Taught students the art of tennis",
+            "Received high praise from clients for teaching ability",
+          ],
           startDate: "June 2022",
           endDate: "August 2022",
         },
@@ -83,16 +89,24 @@ export default function LandingResume() {
       title: "Projects",
       entries: [
         {
-          title: "Test Project 1",
-          bulletPoints: ["Bullet 1", "Bullet 2", "Bullet 3"],
-          startDate: "June 2023",
-          endDate: "August 2023",
+          title: "AI Resume Generator",
+          bulletPoints: [
+            "Used Chat-GPT to generate resumes",
+            "Used Next.js to create the application",
+            "Submitted to Hacklytics 2024",
+          ],
+          startDate: "February 2024",
+          endDate: "February 2024",
         },
         {
-          title: "Test Project 2",
-          bulletPoints: ["Bullet 1", "Bullet 2", "Bullet 3"],
-          startDate: "June 2022",
-          endDate: "August 2022",
+          title: "Forex Trading Algorithm",
+          bulletPoints: [
+            "Used arbitrage algorithms to trade forex",
+            "Made 1.4% profit over risk-free return",
+            "Used MATLAB for model backtesting",
+          ],
+          startDate: "June 2023",
+          endDate: "August 2023",
         },
       ],
     },
@@ -100,19 +114,19 @@ export default function LandingResume() {
   const skillSection: dummySkills[] = [
     {
       title: "Languages",
-      entries: "Language 1, Language 2, Language 3",
+      entries: "HTML, CSS, JavaScript, Python",
     },
     {
       title: "Frameworks",
-      entries: "Framework 1, Framework 2, Framework 3",
+      entries: "FastAPI, Next.js",
     },
     {
       title: "Developer Tools",
-      entries: "Tool 1, Tool 2, Tool 3",
+      entries: "Docker, GitHub, VS Code",
     },
     {
       title: "Libraries",
-      entries: "Library 1, Library 2, Library 3",
+      entries: "numpy, pandas",
     },
   ];
   return (
@@ -123,7 +137,7 @@ export default function LandingResume() {
       transition={{ duration: 0.6, delay: 0.3 }}
       className="flex aspect-[2/3] w-full max-w-md select-none flex-col justify-between rounded-sm bg-white p-10 font-serif text-sm text-black drop-shadow-xl"
     >
-      <p className="text-center text-xl font-bold">John Doe</p>
+      <p className="text-center text-xl font-bold">George P. Burdell</p>
       <div className="mx-auto flex items-center gap-4 text-center">
         {links.map((link, id) => (
           <motion.div
