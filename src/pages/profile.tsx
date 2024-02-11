@@ -172,13 +172,15 @@ export default function Profile() {
   return (
     <>
       <title>Profile | aire</title>
-      <h1 className="mt-8 text-center text-4xl font-semibold">
+      <h1 className="mt-8 text-center text-3xl font-bold">
         Profile Information
       </h1>
       <p className="mb-8 mt-2 text-center text-slate-400">
         Profile information is used to generate your custom resume.
       </p>
-      <h2 className="mx-auto px-2 text-2xl font-bold md:w-11/12">Metadata</h2>
+      <h2 className="mx-auto mb-4 px-2 text-2xl font-bold md:w-11/12">
+        Metadata
+      </h2>
       <div className="mx-auto grid w-full grid-cols-1 gap-4 px-2 md:w-11/12 lg:grid-cols-2 2xl:grid-cols-3">
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label className="text-xl" htmlFor="name">
@@ -398,14 +400,18 @@ export default function Profile() {
                 {educations.data.map((element) => (
                   <div
                     key={element.id}
-                    className="flex w-full flex-row justify-between rounded-xl border-2 p-4"
+                    className="flex w-full flex-row justify-between rounded-xl bg-slate-100 p-6 dark:bg-slate-800"
                   >
                     <div>
-                      <h3 className="text-xl font-semibold">
+                      <h3 className="text-lg font-semibold">
                         {element.school}
                       </h3>
-                      <h4 className="font-light">{element.degree}</h4>
-                      <h4 className="font-light">{element.timeframe}</h4>
+                      <h4 className="text-gray-500 dark:text-gray-400">
+                        {element.degree}
+                      </h4>
+                      <h4 className="text-gray-500 dark:text-gray-400">
+                        {element.timeframe}
+                      </h4>
                     </div>
                     <div className="my-auto flex h-full gap-4">
                       <DialogTrigger asChild>
@@ -567,16 +573,22 @@ export default function Profile() {
                 {experiences.data.map((element) => (
                   <div
                     key={element.id}
-                    className="flex w-full flex-row justify-between rounded-xl border-2 p-4"
+                    className="flex w-full flex-row justify-between rounded-xl bg-slate-100 p-6 dark:bg-slate-800"
                   >
                     <div>
-                      <h3 className="text-xl font-semibold">
+                      <h3 className="text-lg font-semibold">
                         {element.company}
                       </h3>
-                      <h4 className="font-light">{element.role}</h4>
-                      <h4 className="font-light">{element.timeframe}</h4>
+                      <h4 className="text-gray-500 dark:text-gray-400">
+                        {element.role}
+                      </h4>
+                      <h4 className="text-gray-500 dark:text-gray-400">
+                        {element.timeframe}
+                      </h4>
 
-                      <h4 className="font-light">{element.location}</h4>
+                      <h4 className="text-gray-500 dark:text-gray-400">
+                        {element.location}
+                      </h4>
                       <p>{element.description}</p>
                     </div>
                     <div className="my-auto flex h-full gap-4">
@@ -721,20 +733,20 @@ export default function Profile() {
                 {projects.data.map((element) => (
                   <div
                     key={element.id}
-                    className="flex w-full flex-row justify-between rounded-xl border-2 p-4"
+                    className="flex w-full flex-row justify-between rounded-xl bg-slate-100 p-6 dark:bg-slate-800"
                   >
                     <div>
-                      <h3 className="text-xl font-semibold">{element.name}</h3>
-                      <h4 className="font-light">
-                        <span className="font-bold">Technologies: </span>
+                      <h3 className="text-lg font-semibold">{element.name}</h3>
+                      <h4 className="text-gray-500 dark:text-gray-400">
+                        <span className="font-semibold">Technologies: </span>
                         {element.technologies}
                       </h4>
-                      <h4 className="font-light">
-                        <span className="font-bold">Timeframe: </span>
+                      <h4 className="text-gray-500 dark:text-gray-400">
+                        <span className="font-semibold">Timeframe: </span>
                         {element.timeframe}
                       </h4>
-                      <p className="font-light">
-                        <span className="font-bold">Description: </span>
+                      <p className="text-gray-500 dark:text-gray-400">
+                        <span className="font-semibold">Description: </span>
                         {element.description}
                       </p>
                     </div>
