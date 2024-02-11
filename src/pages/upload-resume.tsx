@@ -1,16 +1,21 @@
 import { Button } from "~/components/ui/button";
 import { ArrowRight, Upload } from "lucide-react";
 import { ChangeEvent, useState } from "react";
+import axios from "axios";
+import OpenAI from "openai";
+import { env } from "~/env";
 
 export default function UploadResume() {
   const [selectedFile, setSelectedFile] = useState<File | null | undefined>(
     null,
   );
   const [encoding, setEncoding] = useState<string>();
+  const [url, setUrl] = useState<string>("");
+  const [response, setResponse] = useState<string>();
   const handleFileChange = function (e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
     const file = e.target.files[0];
-    setSelectedFile(e.target.files[0]);
+    setSelectedFile(file);
     if (!file) return;
 
     const reader = new FileReader();
@@ -21,15 +26,61 @@ export default function UploadResume() {
       setEncoding(reader.result);
     };
   };
-  console.log(encoding);
+  async function submitResume() {
+    const formData = new FormData();
+    if (!selectedFile) return;
+    formData.append("file", selectedFile);
+    const response = await fetch(
+      "http://localhost:5000/upload-file-to-cloud-storage",
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const responseWithBody = await response.json();
+    if (!responseWithBody) return;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
+    setResponse(responseWithBody.body);
+    // if (!encoding) return;
+    // const form = new FormData();
+    // form.append("providers", "affinda");
+    // form.append("file", URL.createObjectURL(selectedFile));
+    // form.append("fallback_providers", "");
 
-  /* when user wants to choose another image */
-  const fileResetHandler = () => {
-    setSelectedFile(null);
-  };
+    // const options = {
+    //   method: "POST",
+    //   url: "https://api.edenai.run/v2/ocr/resume_parser",
+    //   headers: {
+    //     Authorization:
+    //       "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmRlODQ3MjYtMGMyYi00N2VjLWFhNTktYzI4NjA2YjRlNjNiIiwidHlwZSI6ImFwaV90b2tlbiJ9.7ZzVqitjAtbt_gvcSOPr9Hi5pT7i9PfuORpV-jvt7UI",
+    //     "Content-Type": "multipart/form-data;",
+    //   },
+    //   data: form,
+    // };
+
+    // axios
+    //   .request(options)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+  }
+  const openai = new OpenAI({ apiKey: env.NEXT_PUBLIC_OPENAI_API_KEY });
+  async function testAI() {
+    const openai = new OpenAI();
+    const completion = await openai.chat.completions.create({
+      messages: [{ role: "system", content: "You are a helpful assistant." }],
+      model: "gpt-3.5-turbo",
+    });
+    console.log(completion.choices[0]);
+  }
+
   return (
     <div>
-      <p className="mb-4 text-5xl font-bold">Upload Resume</p>
+      <p className="mb-4 text-3xl font-bold">Upload Resume</p>
       <div className="flex flex-col gap-4">
         {encoding && selectedFile && (
           <div className="mx-auto hidden w-full max-w-xl md:block">
@@ -47,9 +98,12 @@ export default function UploadResume() {
           </label>
         ) : (
           <div className="mx-auto w-fit">
-            <Button className="group flex items-center gap-2 transition-all duration-200 ease-in">
-              Send Resume{" "}
-              <ArrowRight className="hidden h-4 w-4 opacity-0 transition-all duration-200 ease-in group-hover:block group-hover:opacity-100" />
+            <Button
+              onClick={submitResume}
+              className="group relative flex items-center gap-2 text-center transition-transform duration-200 ease-in"
+            >
+              Send Resume
+              <ArrowRight className="h-4 w-4 scale-0 opacity-0 transition-all duration-200 ease-in group-hover:block group-hover:scale-100 group-hover:opacity-100" />
             </Button>
           </div>
         )}
@@ -62,6 +116,7 @@ export default function UploadResume() {
           onChange={handleFileChange}
         />
       </div>
+      <Button onClick={testAI}>Boop</Button>
     </div>
   );
 }

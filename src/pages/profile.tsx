@@ -242,7 +242,7 @@ export default function Profile() {
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="bg-black">+ Add Eduction</Button>
+              <Button className="bg-black">+ Add Education</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
@@ -498,7 +498,9 @@ export default function Profile() {
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="bg-black text-white">+ Add Project</Button>
+              <Button variant="" className="bg-black text-white">
+                + Add Project
+              </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
