@@ -35,7 +35,7 @@ model Metadata {
     phone    String?
     linkedin String?
     github   String?
-    skills   String?
+    skills   String? @db.Text
     user     User    @relation(fields: [userId], references: [id])
     userId   String  @unique
 }

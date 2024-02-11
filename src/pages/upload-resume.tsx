@@ -50,10 +50,15 @@ export default function UploadResume() {
     if (!selectedFile) return;
     formData.append("file", selectedFile);
     const file_base64 = (await getBase64(selectedFile)) as string;
-    parseResumeMutation.mutate({
-      resume: file_base64,
-      name: selectedFile.name,
-    });
+    parseResumeMutation.mutate(
+      {
+        resume: file_base64,
+        name: selectedFile.name,
+      },
+      {
+        onSuccess: () => redirect("/profile"),
+      },
+    );
     /*const response = await fetch(
       "http://localhost:5000/upload-file-to-cloud-storage",
       {

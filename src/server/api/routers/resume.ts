@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { OpenAI } from "openai";
 import { env } from "~/env";
-import PdfParse from "pdf-parse"
+import PdfParse from "pdf-parse";
 import { requestAsyncStorage } from "next/dist/client/components/request-async-storage.external";
 
 const openai = new OpenAI({
@@ -490,13 +490,13 @@ export const resumeRouter = createTRPCRouter({
   parseResume: protectedProcedure
     .input(z.object({ resume: z.string().min(1), name: z.string() }))
     .mutation(async ({ ctx, input }) => {
-        if (!input.resume) return;
-        const encoding : string | undefined = input.resume.split("base64")[1];
-        if (!encoding) return;
-        const buffer = Buffer.from(encoding, "base64");
-        await PdfParse(buffer).then(async function(data) {
-          const text = data.text;
-          const prompt = `
+      if (!input.resume) return;
+      const encoding: string | undefined = input.resume.split("base64")[1];
+      if (!encoding) return;
+      const buffer = Buffer.from(encoding, "base64");
+      await PdfParse(buffer).then(async function (data) {
+        const text = data.text;
+        const prompt = `
           Format the following text in JSON format, according to the following resumeSchema. The output MUST be valid JSON; make sure keys have unique titles:
 
           resumeSchema = {
@@ -521,7 +521,7 @@ export const resumeRouter = createTRPCRouter({
               description: String;
             }[];
             projects: {
-              company: String;
+              name: String;
               technologies: String;
               timeframe: String;
               description: String;
@@ -531,7 +531,7 @@ export const resumeRouter = createTRPCRouter({
 
           text:
           ${text}
-          `
+          `;
         const resp = await openai.chat.completions.create({
           messages: [{ role: "user", content: prompt }],
 
@@ -540,8 +540,126 @@ export const resumeRouter = createTRPCRouter({
         const output = resp.choices[0]?.message.content;
         if (!output) return;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const json = JSON.parse(output)
-        console.log(json)
+        type ChatGPTJSON = {
+          metadata: {
+            name?: string;
+            location?: string;
+            email?: string;
+            phone?: string;
+            linkedin?: string;
+            github?: string;
+          };
+          education: {
+            school?: string;
+            degree?: string;
+            timeframe?: string;
+          }[];
+          experience: {
+            company?: string;
+            role?: string;
+            location?: string;
+            timeframe?: string;
+            description?: string;
+          }[];
+          projects: {
+            name?: string;
+            technologies?: string;
+            timeframe?: string;
+            description?: string;
+          }[];
+          skills?: string;
+        };
+
+        const json: ChatGPTJSON = JSON.parse(output);
+
+        // Delete all previous data from the user
+        await ctx.db.project.deleteMany({
+          where: {
+            userId: ctx.session.user.id,
+          },
+        });
+        await ctx.db.experience.deleteMany({
+          where: {
+            userId: ctx.session.user.id,
+          },
+        });
+        await ctx.db.education.deleteMany({
+          where: {
+            userId: ctx.session.user.id,
+          },
+        });
+        await ctx.db.metadata.deleteMany({
+          where: {
+            userId: ctx.session.user.id,
+          },
+        });
+
+        // Add new data
+        await ctx.db.metadata.create({
+          data: {
+            name: json?.metadata?.name?.substring(0, 200),
+            location: json?.metadata?.location?.substring(0, 200),
+            email: json?.metadata?.email?.substring(0, 200),
+            linkedin: json?.metadata?.linkedin?.substring(0, 200),
+            github: json?.metadata?.github?.substring(0, 200),
+            skills: json?.skills?.substring(0, 200),
+            userId: ctx.session.user.id.substring(0, 200),
+          },
+        });
+        await ctx.db.education.createMany({
+          data: json.education.map((education) => {
+            return {
+              school: education.school
+                ? education.school.substring(0, 200)
+                : "",
+              degree: education.degree
+                ? education.degree.substring(0, 200)
+                : "",
+              timeframe: education.timeframe
+                ? education.timeframe.substring(0, 200)
+                : "",
+              userId: ctx.session.user.id,
+            };
+          }),
+        });
+        await ctx.db.experience.createMany({
+          data: json.experience.map((experience) => {
+            return {
+              company: experience.company
+                ? experience.company.substring(0, 200)
+                : "",
+              role: experience.role ? experience.role.substring(0, 200) : "",
+              location: experience.location
+                ? experience.location.substring(0, 200)
+                : "",
+              description: experience.description ? experience.description : "",
+              timeframe: experience.timeframe
+                ? experience.timeframe.substring(0, 200)
+                : "",
+              userId: ctx.session.user.id,
+            };
+          }),
+        });
+        await ctx.db.project.createMany({
+          data: json.projects.map((project) => {
+            return {
+              name: project.name ? project.name.substring(0, 200) : "",
+              technologies: project.technologies
+                ? project.technologies.substring(0, 200)
+                : "",
+              timeframe: project.timeframe
+                ? project.timeframe.substring(0, 200)
+                : "",
+              description: project.description ? project.description : "",
+              userId: ctx.session.user.id,
+            };
+          }),
+        });
+
+        console.log(json);
+        return {
+          redirect: "/profile",
+        };
       });
     }),
 });
