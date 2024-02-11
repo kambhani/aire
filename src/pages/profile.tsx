@@ -101,8 +101,8 @@ export default function Profile() {
       setNewMetadata({
         name: metadata.data.name ?? "",
         location: metadata.data.location ?? "",
-        email: metadata.data.location ?? "",
-        phone: metadata.data.location ?? "",
+        email: metadata.data.email ?? "",
+        phone: metadata.data.phone ?? "",
         linkedin: metadata.data.linkedin ?? "",
         github: metadata.data.github ?? "",
         skills: metadata.data.skills ?? "",
@@ -116,10 +116,10 @@ export default function Profile() {
       <h1 className="mt-8 text-center text-4xl font-semibold">
         Profile Information
       </h1>
-      <p className='text-slate-400 text-center mb-8 mt-2'>Profile information is used to generate your custom resume.</p>
-      <h2 className="mx-auto px-2 text-2xl font-bold md:w-11/12">
-        Metadata
-      </h2>
+      <p className="mb-8 mt-2 text-center text-slate-400">
+        Profile information is used to generate your custom resume.
+      </p>
+      <h2 className="mx-auto px-2 text-2xl font-bold md:w-11/12">Metadata</h2>
       <div className="mx-auto grid w-full grid-cols-1 gap-4 px-2 md:w-11/12 lg:grid-cols-2 2xl:grid-cols-3">
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label className="text-xl" htmlFor="name">
@@ -230,7 +230,7 @@ export default function Profile() {
       </div>
       <div className="mx-auto mt-4 px-2 md:w-11/12">
         <Button
-          className='bg-black'
+          className="bg-black"
           onClick={() => upsertMetadataMutation.mutate(newMetadata)}
         >
           Save changes
@@ -242,7 +242,7 @@ export default function Profile() {
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button className='bg-black'>+ Add Eduction</Button>
+              <Button className="bg-black">+ Add Eduction</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
@@ -327,10 +327,13 @@ export default function Profile() {
                     <h3 className="text-xl font-semibold">{element.school}</h3>
                     <h4 className="font-light">{element.degree}</h4>
                     <h4 className="font-light">{element.timeframe}</h4>
-
                   </div>
                   <div className="my-auto flex h-full gap-4">
-                    <Button variant="destructive" size="icon" className='bg-transparent text-red-400'>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="bg-transparent text-red-400"
+                    >
                       <Trash2
                         className="h-4 w-4"
                         onClick={() =>
@@ -346,13 +349,12 @@ export default function Profile() {
         </div>
       </div>
       <div className="mx-auto mt-8 px-2 md:w-11/12">
-
         <div className="flex justify-between">
           <h2 className="text-2xl font-bold ">Experience</h2>
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button className='bg-black'>+ Add Experience</Button>
+              <Button className="bg-black">+ Add Experience</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
@@ -469,10 +471,13 @@ export default function Profile() {
 
                     <h4 className="font-light">{element.location}</h4>
                     <p>{element.description}</p>
-
                   </div>
                   <div className="my-auto flex h-full gap-4">
-                    <Button variant="destructive" size="icon" className='bg-transparent text-red-400'>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="bg-transparent text-red-400"
+                    >
                       <Trash2
                         className="h-4 w-4"
                         onClick={() =>
@@ -493,7 +498,7 @@ export default function Profile() {
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="" className='bg-black text-white'>+ Add Project</Button>
+              <Button className="bg-black text-white">+ Add Project</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
@@ -587,12 +592,25 @@ export default function Profile() {
                 >
                   <div>
                     <h3 className="text-xl font-semibold">{element.name}</h3>
-                    <h4 className="font-light"><span className='font-bold'>Technologies: </span>{element.technologies}</h4>
-                    <h4 className="font-light"><span className='font-bold'>Timeframe: </span>{element.timeframe}</h4>
-                    <p className="font-light"><span className='font-bold'>Description: </span>{element.description}</p>
+                    <h4 className="font-light">
+                      <span className="font-bold">Technologies: </span>
+                      {element.technologies}
+                    </h4>
+                    <h4 className="font-light">
+                      <span className="font-bold">Timeframe: </span>
+                      {element.timeframe}
+                    </h4>
+                    <p className="font-light">
+                      <span className="font-bold">Description: </span>
+                      {element.description}
+                    </p>
                   </div>
                   <div className="my-auto flex h-full gap-4">
-                    <Button variant="destructive" size="icon" className='bg-transparent text-red-400'>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="bg-transparent text-red-400"
+                    >
                       <Trash2
                         className="h-4 w-4"
                         onClick={() =>
