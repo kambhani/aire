@@ -101,22 +101,39 @@ export default function Generate() {
             <ul className="ml-8 mt-2 list-disc">
               <li>
                 <span className="font-bold">Generated Resume: </span>
-                <a
-                  href={generateMutation.data.urls[0]}
-                  className="text-blue-400"
+                <form
+                  action="https://www.overleaf.com/docs"
+                  method="post"
+                  target="_blank"
                 >
-                  {generateMutation.data.urls[0]}
-                </a>
+                  <input
+                    className="hidden"
+                    type="text"
+                    name="snip_uri"
+                    value={generateMutation.data.urls[0]}
+                  />
+                  <Button size="sm" type="submit" variant="success">
+                    Open in Overleaf
+                  </Button>
+                </form>
               </li>
-
               <li>
                 <span className="font-bold">Generated Cover Letter: </span>
-                <a
-                  href={generateMutation.data.urls[1]}
-                  className="text-blue-400"
+                <form
+                  action="https://www.overleaf.com/docs"
+                  method="post"
+                  target="_blank"
                 >
-                  {generateMutation.data.urls[1]}
-                </a>
+                  <input
+                    className="hidden"
+                    type="text"
+                    name="snip_uri"
+                    value={generateMutation.data.urls[1]}
+                  />
+                  <Button size="sm" type="submit" variant="success">
+                    Open in Overleaf
+                  </Button>
+                </form>
               </li>
             </ul>
             <div className="mt-4 grid grid-cols-2 gap-4">
