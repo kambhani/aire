@@ -68,7 +68,6 @@ export default function UploadResume() {
     //     console.error(error);
     //   });
   }
-  const openai = new OpenAI({ apiKey: env.NEXT_PUBLIC_OPENAI_API_KEY });
   async function testAI() {
     const openai = new OpenAI();
     const completion = await openai.chat.completions.create({

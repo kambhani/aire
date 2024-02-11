@@ -4,10 +4,6 @@ import { type GetServerSideProps } from "next";
 import { signIn, getProviders } from "next-auth/react";
 import { FaDiscord } from "react-icons/fa";
 
-const mapper: { [key: string]: any } = {
-  Discord: <FaDiscord className="mr-2 text-xl" />,
-};
-
 export default function SignIn({
   providers,
 }: {
@@ -23,7 +19,7 @@ export default function SignIn({
       {Object.values(providers).map((provider) => (
         <div key={provider.name}>
           <Button onClick={() => signIn(provider.id)} className="mt-8">
-            {mapper[provider.name]} Sign in with {provider.name}
+            <FaDiscord className="mr-2 text-xl" /> Sign in with {provider.name}
           </Button>
         </div>
       ))}

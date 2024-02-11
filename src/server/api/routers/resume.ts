@@ -249,6 +249,7 @@ const coverLetterTemplate = (output: {
     degree: string;
     timeframe: string;
   }[];
+  body: string;
 }) => {
   return String.raw`
   %-------------------------
@@ -362,9 +363,7 @@ const coverLetterTemplate = (output: {
   Date: \today \par \vspace{-0.1cm}
   Dear Hiring Manager, % OR To whom this may concern, 
   
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam vulputate dignissim suspendisse in est ante in nibh mauris. Dui sapien eget mi proin sed. Sed euismod nisi porta lorem mollis aliquam ut. In hendrerit gravida rutrum quisque non tellus orci. Ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis. Faucibus nisl tincidunt eget nullam non nisi est sit. Nisl rhoncus mattis rhoncus urna neque viverra justo. Pulvinar elementum integer enim neque volutpat ac tincidunt. Nunc lobortis mattis aliquam faucibus purus in. In hac habitasse platea dictumst. \par
-  
-  Nibh nisl condimentum id venenatis a condimentum. Id venenatis a condimentum vitae sapien pellentesque. Id interdum velit laoreet id donec ultrices tincidunt arcu. Viverra maecenas accumsan lacus vel facilisis volutpat est. Amet aliquam id diam maecenas ultricies mi eget mauris. Arcu felis bibendum ut tristique. Ullamcorper eget nulla facilisi etiam dignissim diam quis enim. Nisl nunc mi ipsum faucibus vitae. Enim nunc faucibus a pellentesque sit. Vulputate eu scelerisque felis imperdiet proin fermentum leo. Eget nulla facilisi etiam dignissim. Tortor posuere ac ut consequat semper viverra. Sit amet justo donec enim diam vulputate ut. Suspendisse sed nisi lacus sed viverra tellus in hac habitasse. Lectus arcu bibendum at varius vel pharetra vel turpis. Odio aenean sed adipiscing diam donec adipiscing tristique risus nec. Quisque sagittis purus sit amet volutpat consequat. Quis ipsum suspendisse ultrices gravida dictum fusce. A pellentesque sit amet porttitor eget dolor morbi non. Risus sed vulputate odio ut enim blandit volutpat maecenas volutpat. \par
+  ${output.body}
   
   %%%%%%% --------------------------------------------------------------------------------------
   %%%%%%%  SIGNATURE
@@ -442,10 +441,13 @@ export const resumeRouter = createTRPCRouter({
         ],
       };
 
+      const coverLetterBody = "sample text";
+
       const resumeInput = {
         ...response,
         metadata: user.metadata,
         education: user.educations,
+        body: coverLetterBody,
       };
 
       console.log(resumeTemplate(resumeInput));
