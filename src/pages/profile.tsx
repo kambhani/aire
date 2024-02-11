@@ -382,7 +382,7 @@ export default function Profile() {
                   <Button
                     type="submit"
                     onClick={() =>
-                      newExperience.id.length > 0
+                      newEducation.id.length > 0
                         ? updateEducationMutation.mutate(newEducation)
                         : createEducationMutation.mutate(newEducation)
                     }
