@@ -207,11 +207,13 @@ const resumeTemplate = (output: {
           return String.raw`
         \resumeProjectHeading
           {\textbf{${project.name}} $|$ \emph{${project.technologies}}}{${project.timeframe}}
+          \resumeItemListStart
           ${project.description
             .map((bullet) => {
               return String.raw`\resumeItem{${bullet}}`;
             })
             .join("")}
+            \resumeItemListEnd
         `;
         })
         .join("")}
