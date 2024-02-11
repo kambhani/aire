@@ -21,16 +21,19 @@ export default function Home() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col gap-4 text-center align-middle font-serif text-5xl font-bold md:text-left mt-8"
+            className="mt-8 flex flex-col gap-4 text-center align-middle font-serif text-5xl font-bold md:text-left"
           >
-            <p className='leading-tight'>Automatically tailor your resume  <span className="bg-gradient-to-r from-black to-slate-400 bg-clip-text text-transparent dark:from-white dark:to-slate-300">
-              to each job posting.
-            </span></p>
+            <p className="leading-tight">
+              Automatically tailor your resume{" "}
+              <span className="bg-gradient-to-r from-black to-slate-400 bg-clip-text text-transparent dark:from-white dark:to-slate-300">
+                to each job posting.
+              </span>
+            </p>
 
             <div>
-              <a href="/auth/signin">
+              <Link href="/auth/signin">
                 <Button>Get Started</Button>
-              </a>
+              </Link>
             </div>
           </motion.div>
           <LandingResume />

@@ -35,7 +35,7 @@ export default function Profile() {
 
   const upsertMetadataMutation = api.metadata.edit.useMutation({
     onSuccess: (data) => {
-      utils.metadata.invalidate();
+      void utils.metadata.invalidate();
       setNewMetadata({
         name: data.name ?? "",
         location: data.location ?? "",
@@ -498,9 +498,7 @@ export default function Profile() {
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="" className="bg-black text-white">
-                + Add Project
-              </Button>
+              <Button className="bg-black text-white">+ Add Project</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
