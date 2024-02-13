@@ -3,7 +3,6 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { OpenAI } from "openai";
 import { env } from "~/env";
 import PdfParse from "pdf-parse";
-import { requestAsyncStorage } from "next/dist/client/components/request-async-storage.external";
 
 const openai = new OpenAI({
   apiKey: env.OPENAI_API_KEY,
@@ -501,14 +500,14 @@ export const resumeRouter = createTRPCRouter({
       });
       const chatGPTResume = resumeResp?.choices[0];
 
-      console.log(chatGPTResume);
-
-      const strResume = chatGPTResume.message.content
-        .replaceAll("&", "\\\\&")
+      const strResume = chatGPTResume?.message.content
+        ?.replaceAll("&", "\\\\&")
         .replaceAll("•", "")
         .replaceAll("%", "\\\\%");
 
-      const jsonResume = JSON.parse(strResume);
+      const jsonResume: typeof response = strResume
+        ? (JSON.parse(strResume) as typeof response)
+        : response;
 
       const resumeInput = {
         ...jsonResume,
@@ -565,9 +564,11 @@ export const resumeRouter = createTRPCRouter({
 
         model: "gpt-3.5-turbo",
       });
-      const scoreText = scoreResp?.choices[0].message.content;
+      const scoreText = scoreResp?.choices[0]?.message.content;
 
-      const scoreJSON = JSON.parse(scoreText);
+      const scoreJSON = scoreText
+        ? (JSON.parse(scoreText) as typeof scoreResponse)
+        : scoreResponse;
 
       // console.log(resumeTemplate(resumeInput));
 
@@ -666,7 +667,7 @@ export const resumeRouter = createTRPCRouter({
           skills?: string;
         };
 
-        const json: ChatGPTJSON = JSON.parse(output);
+        const json = JSON.parse(output) as ChatGPTJSON;
 
         // Delete all previous data from the user
         await ctx.db.project.deleteMany({

@@ -16,6 +16,8 @@ import { Textarea } from "~/components/ui/textarea";
 import { Pencil, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { getServerAuthSession } from "~/server/auth";
+import { type GetServerSideProps } from "next";
 
 export default function Profile() {
   const utils = api.useUtils();
@@ -781,3 +783,19 @@ export default function Profile() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getServerAuthSession(ctx);
+  if (!session || !session.user) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

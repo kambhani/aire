@@ -1,16 +1,15 @@
 import { Button } from "~/components/ui/button";
-import { ArrowRight, Send, Upload } from "lucide-react";
-import { ChangeEvent, useState } from "react";
-import axios from "axios";
-import OpenAI from "openai";
-import { env } from "~/env";
+import { ArrowRight, Upload } from "lucide-react";
+import { useState } from "react";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
-import { parseMutationArgs } from "@tanstack/react-query";
+import { getServerAuthSession } from "~/server/auth";
+import { type GetServerSideProps } from "next";
 
 export default function UploadResume() {
   const utils = api.useUtils();
   const router = useRouter();
+
   const [selectedFile, setSelectedFile] = useState<File | null | undefined>(
     null,
   );
@@ -31,8 +30,6 @@ export default function UploadResume() {
     });
   }
   const [encoding, setEncoding] = useState<string>();
-  const [url, setUrl] = useState<string>("");
-  const [response, setResponse] = useState<string>();
   const handleFileChange = function (e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
     const file = e.target.files[0];
@@ -140,3 +137,19 @@ export default function UploadResume() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getServerAuthSession(ctx);
+  if (!session || !session.user) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

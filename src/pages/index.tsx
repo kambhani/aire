@@ -1,9 +1,6 @@
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import { motion } from "framer-motion";
-
-import { api } from "~/utils/api";
 import LandingResume from "~/components/LandingResume";
 import { Button } from "~/components/ui/button";
 

@@ -1,20 +1,18 @@
 import { Textarea } from "~/components/ui/textarea";
-import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import { toast } from "sonner";
 import { Progress } from "~/components/ui/progress";
-import { ExternalLink, Link } from "lucide-react";
+import { ExternalLink } from "lucide-react";
+import { getServerAuthSession } from "~/server/auth";
+import { type GetServerSideProps } from "next";
 
 export default function Generate() {
   const [description, setDescription] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [userText, setUserText] = useState("");
   const [progress, setProgress] = useState(0);
-
-  let count = 0;
 
   const generateMutation = api.resume.generate.useMutation({
     onMutate: () => {
@@ -42,7 +40,7 @@ export default function Generate() {
     return () => clearInterval(interval);
   }, [loading]);
 
-  function hslToRgb(h, s, l) {
+  function hslToRgb(h: number, s: number, l: number) {
     let r, g, b;
 
     if (s === 0) {
@@ -58,7 +56,7 @@ export default function Generate() {
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
   }
 
-  function hueToRgb(p, q, t) {
+  function hueToRgb(p: number, q: number, t: number) {
     if (t < 0) t += 1;
     if (t > 1) t -= 1;
     if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -67,23 +65,23 @@ export default function Generate() {
     return p;
   }
 
-  function numberToColorHsl(i) {
+  function numberToColorHsl(i: number) {
     // as the function expects a value between 0 and 1, and red = 0° and green = 120°
     // we convert the input to the appropriate hue value
-    var hue = (i * 1.2) / 360;
+    const hue = (i * 1.2) / 360;
     // we convert hsl to rgb (saturation 100%, lightness 50%)
-    var rgb = hslToRgb(hue, 1, 0.5);
+    const rgb = hslToRgb(hue, 1, 0.5);
     // we format to css value and return
     // return 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
-    return rgbToHex(rgb[0], rgb[1], rgb[2]);
+    return rgbToHex(rgb[0] ?? 0, rgb[1] ?? 0, rgb[2] ?? 0);
   }
 
-  function componentToHex(c) {
-    var hex = c.toString(16);
+  function componentToHex(c: number) {
+    const hex = c.toString(16);
     return hex.length == 1 ? "0" + hex : hex;
   }
 
-  function rgbToHex(r, g, b) {
+  function rgbToHex(r: number, g: number, b: number) {
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
   }
 
@@ -134,7 +132,9 @@ export default function Generate() {
               Current Resume Match:{" "}
               <span
                 className={`text-3xl`}
-                style={{ color: numberToColorHsl(generateMutation.data.match) }}
+                style={{
+                  color: numberToColorHsl(Number(generateMutation.data.match)),
+                }}
               >
                 {generateMutation.data.match}%
               </span>
@@ -211,3 +211,19 @@ export default function Generate() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getServerAuthSession(ctx);
+  if (!session || !session.user) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

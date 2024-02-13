@@ -1,4 +1,5 @@
-import { Variants, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 
 type dummyLink = string;
 type dummyEntry = {
@@ -30,20 +31,6 @@ const containerVariant: Variants = {
       duration: 0.6,
       delay: 0.3,
       staggerChildren: 0.2,
-    },
-  },
-};
-
-const childVariant: Variants = {
-  initial: {
-    opacity: 0,
-    y: 8,
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.2,
     },
   },
 };
@@ -165,7 +152,7 @@ export default function LandingResume() {
           transition={{ duration: 0.4, delay: 1 + 0.2 * id }}
         >
           <p className="font-bold uppercase underline">{section.title}</p>
-          {section.entries.map((entry, id) => (
+          {section.entries.map((entry) => (
             <div key={entry.title}>
               <div className="flex items-center justify-between">
                 <p className="font-bold">{entry.title}</p>
@@ -176,7 +163,7 @@ export default function LandingResume() {
                 </div>
               </div>
               <ul className="ml-4 list-disc">
-                {entry.bulletPoints.map((bullet, id) => (
+                {entry.bulletPoints.map((bullet) => (
                   <li key={bullet}>{bullet}</li>
                 ))}
               </ul>
@@ -190,7 +177,7 @@ export default function LandingResume() {
         transition={{ duration: 0.4, delay: 1 + 0.2 * sections.length }}
       >
         <p className="font-bold uppercase underline">Skills</p>
-        {skillSection.map((skills, id) => (
+        {skillSection.map((skills) => (
           <div key={skills.title}>
             <p className="font-bold">
               {skills.title}{" "}
