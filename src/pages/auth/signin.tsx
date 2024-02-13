@@ -1,14 +1,10 @@
 import { Button } from "~/components/ui/button";
 import { getServerAuthSession } from "~/server/auth";
 import { type GetServerSideProps } from "next";
-import { signIn, getProviders } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { FaDiscord } from "react-icons/fa";
 
-export default function SignIn({
-  providers,
-}: {
-  providers: { name: string; id: string }[]; // Prob more fields but this is all that's need to make TS happy
-}) {
+export default function SignIn() {
   return (
     <div className="text-center">
       <h1 className="mt-8 text-xl font-bold">Sign In to Aire</h1>
@@ -16,13 +12,9 @@ export default function SignIn({
         If you do not already have an account, one will automatically be made
         for you.
       </p>
-      {Object.values(providers).map((provider) => (
-        <div key={provider.name}>
-          <Button onClick={() => signIn(provider.id)} className="mt-8">
-            <FaDiscord className="mr-2 text-xl" /> Sign in with {provider.name}
-          </Button>
-        </div>
-      ))}
+      <Button onClick={() => signIn("discord")} className="mt-8">
+        <FaDiscord className="mr-2 text-xl" /> Sign in with Discord
+      </Button>
     </div>
   );
 }
@@ -39,9 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const providers = await getProviders();
-
   return {
-    props: { providers: providers ?? [] },
+    props: {},
   };
 };
