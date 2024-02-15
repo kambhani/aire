@@ -122,16 +122,18 @@ export default function LandingResume() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.3 }}
-      whileHover={{
-        x: -20,
-        transition: {
-          duration: 0.6,
-          delay: 0,
-        },
-      }}
-      className="flex aspect-[2/3] w-full max-w-md select-none flex-col justify-between rounded-sm bg-white p-10 font-serif text-sm text-black drop-shadow-xl"
+      // whileHover={{
+      //   x: -20,
+      //   transition: {
+      //     duration: 0.6,
+      //     delay: 0,
+      //   },
+      // }}
+      className="flex aspect-[2/3] w-full max-w-lg select-none flex-col gap-4 rounded-sm bg-white p-8 font-serif text-xs text-black drop-shadow-xl lg:p-10 lg:text-base"
     >
-      <p className="text-center text-xl font-bold">George P. Burdell</p>
+      <p className="text-center text-base font-bold lg:text-xl">
+        George P. Burdell
+      </p>
       <div className="mx-auto flex items-center gap-4 text-center">
         {links.map((link, id) => (
           <motion.div
