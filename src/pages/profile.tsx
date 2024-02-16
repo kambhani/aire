@@ -172,7 +172,7 @@ export default function Profile() {
   }, [metadata.isFetched]);
 
   return (
-    <>
+    <div className="mx-auto w-full max-w-5xl">
       <title>Profile | aire</title>
       <h1 className="mt-8 text-center text-3xl font-bold">
         Profile Information
@@ -180,12 +180,10 @@ export default function Profile() {
       <p className="mb-8 mt-2 text-center text-slate-400">
         Profile information is used to generate your custom resume.
       </p>
-      <h2 className="mx-auto mb-4 px-2 text-2xl font-bold md:w-11/12">
-        Metadata
-      </h2>
-      <div className="mx-auto grid w-full grid-cols-1 gap-4 px-2 md:w-11/12 lg:grid-cols-2 2xl:grid-cols-3">
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label className="text-xl" htmlFor="name">
+      <h2 className="text-2xl font-bold">Metadata</h2>
+      <div className="mx-auto mt-2 grid w-full grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
+        <div className="grid gap-1.5">
+          <Label className="text-lg" htmlFor="name">
             Name
           </Label>
           <Input
@@ -198,8 +196,8 @@ export default function Profile() {
             placeholder={metadata.data?.name ?? "First Last"}
           />
         </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label className="text-xl" htmlFor="location">
+        <div className="grid gap-1.5">
+          <Label className="text-lg" htmlFor="location">
             Location
           </Label>
           <Input
@@ -215,8 +213,8 @@ export default function Profile() {
             placeholder={metadata.data?.location ?? "City, State"}
           />
         </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label className="text-xl" htmlFor="email">
+        <div className="grid gap-1.5">
+          <Label className="text-lg" htmlFor="email">
             Email
           </Label>
           <Input
@@ -229,8 +227,8 @@ export default function Profile() {
             placeholder={metadata.data?.email ?? "email@email.com"}
           />
         </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label className="text-xl" htmlFor="phone">
+        <div className="grid gap-1.5">
+          <Label className="text-lg" htmlFor="phone">
             Phone
           </Label>
           <Input
@@ -243,8 +241,8 @@ export default function Profile() {
             placeholder={metadata.data?.phone ?? "+1"}
           />
         </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label className="text-xl" htmlFor="linkedin">
+        <div className="grid gap-1.5">
+          <Label className="text-lg" htmlFor="linkedin">
             LinkedIn
           </Label>
           <Input
@@ -262,8 +260,8 @@ export default function Profile() {
             }
           />
         </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label className="text-xl" htmlFor="github">
+        <div className="grid gap-1.5">
+          <Label className="text-lg" htmlFor="github">
             GitHub
           </Label>
           <Input
@@ -276,8 +274,8 @@ export default function Profile() {
             placeholder={metadata.data?.linkedin ?? "https://github.com/"}
           />
         </div>
-        <div className="col-span-3 grid w-full items-center gap-1.5">
-          <Label className="text-xl" htmlFor="skills">
+        <div className="grid gap-1.5 md:col-span-3">
+          <Label className="text-lg" htmlFor="skills">
             Skills
           </Label>
           <Input
@@ -291,7 +289,7 @@ export default function Profile() {
           />
         </div>
       </div>
-      <div className="mx-auto mt-4 px-2 md:w-11/12">
+      <div className="mt-4">
         <Button
           className="bg-black"
           onClick={() => upsertMetadataMutation.mutate(newMetadata)}
@@ -299,7 +297,7 @@ export default function Profile() {
           Save changes
         </Button>
       </div>
-      <div className="mx-auto mt-8 px-2 md:w-11/12">
+      <div className="mx-auto mt-8">
         <Dialog>
           <div className="flex justify-between">
             <h2 className="text-2xl font-bold">Education</h2>
@@ -443,7 +441,7 @@ export default function Profile() {
         </Dialog>
       </div>
 
-      <div className="mx-auto mt-8 px-2 md:w-11/12">
+      <div className="mx-auto mt-8">
         <Dialog>
           <div className="flex justify-between">
             <h2 className="text-2xl font-bold ">Experience</h2>
@@ -578,19 +576,16 @@ export default function Profile() {
                     className="flex w-full flex-row justify-between rounded-xl bg-slate-100 p-6 dark:bg-slate-800"
                   >
                     <div>
-                      <h3 className="text-lg font-semibold">
-                        {element.company}
-                      </h3>
-                      <h4 className="text-gray-500 dark:text-gray-400">
-                        {element.role}
-                      </h4>
-                      <h4 className="text-gray-500 dark:text-gray-400">
-                        {element.timeframe}
-                      </h4>
-
-                      <h4 className="text-gray-500 dark:text-gray-400">
-                        {element.location}
-                      </h4>
+                      <div className="flex items-center">
+                        <h3 className="text-lg font-semibold">
+                          {element.company}{" "}
+                          <span className="font-normal"> - {element.role}</span>
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                        <h4>{element.location}</h4>
+                        <h4>{element.timeframe}</h4>
+                      </div>
                       <p>{element.description}</p>
                     </div>
                     <div className="my-auto flex h-full gap-4">
@@ -620,7 +615,7 @@ export default function Profile() {
           </div>
         </Dialog>
       </div>
-      <div className="mx-auto mt-8 px-2 md:w-11/12">
+      <div className="mx-auto mt-8">
         <Dialog>
           <div className="flex justify-between">
             <h2 className="text-2xl font-bold ">Projects</h2>
@@ -744,13 +739,9 @@ export default function Profile() {
                         {element.technologies}
                       </h4>
                       <h4 className="text-gray-500 dark:text-gray-400">
-                        <span className="font-semibold">Timeframe: </span>
                         {element.timeframe}
                       </h4>
-                      <p className="text-gray-500 dark:text-gray-400">
-                        <span className="font-semibold">Description: </span>
-                        {element.description}
-                      </p>
+                      <p>{element.description}</p>
                     </div>
                     <div className="my-auto flex h-full gap-4">
                       <DialogTrigger asChild>
@@ -780,7 +771,7 @@ export default function Profile() {
           </div>
         </Dialog>
       </div>
-    </>
+    </div>
   );
 }
 
